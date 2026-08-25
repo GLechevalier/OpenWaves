@@ -1,0 +1,4 @@
+# Python version : 3.14.2 
+numpy==2.5.2
+matplotlib==3.11.1
+pandas==
