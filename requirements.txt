@@ -5,3 +5,9 @@ pandas==3.0.5
 
 # Visualizer
 rerun-sdk==0.36.3
+
+# Simulation
+h5py==3.16.0
+
+ffmpeg
+scipy

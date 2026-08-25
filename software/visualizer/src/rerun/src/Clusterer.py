@@ -11,8 +11,13 @@ import pandas as pd
 
 sys.path.append(os.getcwd())
 
-# Load and combine all batches
-files = [f"recorded_data/rice_test/npy/rice_one_stone{i}.npy" for i in range(1,4)] + [f"recorded_data/rice_test/npy/rice_no_stone{i}.npy" for i in range(1,4)]
+DATA_DIR = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)),
+    "..", "..", "..", "..", "data", "rerun_recorded_data"
+)
+
+# Load and combine all batches (house_test: 1-5 = plafonds, 6-10 = murs)
+files = [os.path.join(DATA_DIR, "house_test", "npy", f"data_{i}.npy") for i in range(1, 11)]
 data = np.concatenate([np.load(f) for f in files], axis=0)
 
 # Flatten each sample: (N, 10, 32*16) = (N, 5120)
