@@ -1,0 +1,16 @@
+{
+  "subject_id": "S01",
+  "action": "sideways_fall",
+  "radar_height_m": 0.85,
+  "cfg": "cfg/Tracking_MidBw.cfg",
+  "date": "2026-03-23 16:49:57",
+  "total_frames": 1162,
+  "fall_timestamps": [
+    1774281008.0947156,
+    1774281037.5333586,
+    1774281055.454464,
+    1774281087.1849005,
+    1774281108.9291344
+  ],
+  "num_falls": 5
+}

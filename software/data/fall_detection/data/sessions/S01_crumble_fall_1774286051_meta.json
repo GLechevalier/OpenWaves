@@ -1,0 +1,16 @@
+{
+  "subject_id": "S01",
+  "action": "crumble_fall",
+  "radar_height_m": 0.85,
+  "cfg": "cfg/Tracking_MidBw.cfg",
+  "date": "2026-03-23 18:14:11",
+  "total_frames": 981,
+  "fall_timestamps": [
+    1774286062.4899726,
+    1774286082.6596255,
+    1774286104.77366,
+    1774286133.3794467,
+    1774286142.9688113
+  ],
+  "num_falls": 5
+}

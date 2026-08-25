@@ -1,0 +1,16 @@
+{
+  "subject_id": "S01",
+  "action": "backward_fall",
+  "radar_height_m": 0.85,
+  "cfg": "cfg/Tracking_MidBw.cfg",
+  "date": "2026-03-23 16:33:09",
+  "total_frames": 1129,
+  "fall_timestamps": [
+    1774280003.6574507,
+    1774280024.2063692,
+    1774280044.6883154,
+    1774280064.9895496,
+    1774280090.0057316
+  ],
+  "num_falls": 5
+}
