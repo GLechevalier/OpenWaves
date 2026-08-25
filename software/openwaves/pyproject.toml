@@ -1,0 +1,50 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "openwaves"
+version = "0.1.0"
+description = "Python toolkit for the TI IWRL6432BOOST mmWave radar (OpenWaves): flash, configure, stream and parse — no TI software required"
+readme = "README.md"
+license = "GPL-3.0-or-later"
+requires-python = ">=3.10"
+authors = [{ name = "Gauthier Lechevalier" }]
+keywords = ["mmwave", "radar", "IWRL6432", "TI", "FMCW", "point cloud"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering",
+    "Topic :: System :: Hardware :: Hardware Drivers",
+    "Programming Language :: Python :: 3",
+]
+dependencies = [
+    "numpy>=1.24",
+    "pyserial>=3.5",
+]
+
+[project.optional-dependencies]
+ble = ["bleak>=0.21"]
+viz = ["rerun-sdk>=0.20", "matplotlib"]
+ml = ["scikit-learn", "joblib", "pandas", "xgboost"]
+dev = ["pytest>=7", "pytest-cov", "ruff"]
+
+[project.urls]
+Homepage = "https://github.com/GLechevalier/OpenWaves"
+Documentation = "https://github.com/GLechevalier/OpenWaves/tree/main/docs"
+
+[project.scripts]
+openwaves = "openwaves.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/openwaves"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"src/openwaves/firmware/mmwave_demo.Release.appimage" = "openwaves/firmware/mmwave_demo.Release.appimage"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100

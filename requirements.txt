@@ -1,13 +1,17 @@
-# Python version : 3.14.2 
-numpy==2.5.2
-matplotlib==3.11.1
-pandas==3.0.5
+# Python version: 3.12+ recommended (repo developed on 3.14)
+#
+# The openwaves package (software/openwaves) is the single source of truth
+# for dependencies. Extras:
+#   viz = rerun-sdk + matplotlib     ble = bleak (RadarWall ESP32 bridge)
+#   ml  = scikit-learn, joblib, pandas, xgboost
+#   dev = pytest, ruff
+-e software/openwaves[viz,ble,ml,dev]
 
-# Visualizer
-rerun-sdk==0.36.3
-
-# Simulation
-h5py==3.16.0
-
-ffmpeg
+# Electromagnetic simulation (hardware/electronics/electromagnetic_simulation)
+# — openEMS/CSXCAD wheels are installed separately, see the root README.
 scipy
+h5py
+
+# Fall detection deep models (CNN fusion, SPiKE pose estimation)
+torch
+json_fix

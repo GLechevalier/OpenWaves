@@ -1,0 +1,39 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "openwaves: stream frames",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "openwaves",
+            "args": ["stream", "--cfg", "software/fall_detection_example/cfg/Tracking_MidBw.cfg"],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "openwaves: flash prebuilt firmware",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "openwaves",
+            "args": ["flash"],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Fall detection demo",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/software/fall_detection_example/src/examples/fall_detector_example.py",
+            "cwd": "${workspaceFolder}/software/fall_detection_example",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Material classification BLE visualizer",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/software/material_classification_example/visualizer/src/rerun/data_visualizer.py",
+            "cwd": "${workspaceFolder}/software/material_classification_example/visualizer/src/rerun",
+            "console": "integratedTerminal"
+        }
+    ]
+}

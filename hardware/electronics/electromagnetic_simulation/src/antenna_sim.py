@@ -1255,23 +1255,23 @@ class ElectromagneticSim:
         FDTD.AddEdges2Grid(dirs='xyz', properties=RXTX.RX.RX3.patch, metal_edge_res=metal_edge_res)
 
 
-        # epsilon = 0.0
-        # nb_cells = 2
-        # y_mesh = -3-self.rx_tx_spacing_x/2+2.5 + self.spacing_x/2
-        # mesh.AddLine('y', linspace(y_mesh-self.inter_feed_width/2-epsilon/2,y_mesh+self.inter_feed_width/2+epsilon/2,nb_cells))
+        epsilon = 0.0
+        nb_cells = 2
+        y_mesh = -3-self.rx_tx_spacing_x/2+2.5 + self.spacing_x/2
+        mesh.AddLine('y', linspace(y_mesh-self.inter_feed_width/2-epsilon/2,y_mesh+self.inter_feed_width/2+epsilon/2,nb_cells))
         
-        # y_mesh = -3-self.rx_tx_spacing_x/2+2.5 - self.spacing_x/2
-        # mesh.AddLine('y', linspace(y_mesh-self.inter_feed_width/2-epsilon/2,y_mesh+self.inter_feed_width/2+epsilon/2,nb_cells))
+        y_mesh = -3-self.rx_tx_spacing_x/2+2.5 - self.spacing_x/2
+        mesh.AddLine('y', linspace(y_mesh-self.inter_feed_width/2-epsilon/2,y_mesh+self.inter_feed_width/2+epsilon/2,nb_cells))
         
-        # y_mesh = -3+self.rx_tx_spacing_x/2+2.5 + self.spacing_x
-        # mesh.AddLine('y', linspace(y_mesh-self.inter_feed_width/2-epsilon/2,y_mesh+self.inter_feed_width/2+epsilon/2,nb_cells))
+        y_mesh = -3+self.rx_tx_spacing_x/2+2.5 + self.spacing_x
+        mesh.AddLine('y', linspace(y_mesh-self.inter_feed_width/2-epsilon/2,y_mesh+self.inter_feed_width/2+epsilon/2,nb_cells))
         
-        # y_mesh = -3 + self.rx_tx_spacing_x/2+2.5
-        # mesh.AddLine('y', linspace(y_mesh-self.inter_feed_width/2-epsilon/2,y_mesh+self.inter_feed_width/2+epsilon/2,nb_cells))
+        y_mesh = -3 + self.rx_tx_spacing_x/2+2.5
+        mesh.AddLine('y', linspace(y_mesh-self.inter_feed_width/2-epsilon/2,y_mesh+self.inter_feed_width/2+epsilon/2,nb_cells))
         
-        # y_mesh = -3 + self.rx_tx_spacing_x/2+2.5 - self.spacing_x
-        # mesh.AddLine('y', linspace(y_mesh-self.inter_feed_width/2-epsilon/2,y_mesh+self.inter_feed_width/2+epsilon/2,nb_cells))
-        # #FDTD.AddEdges2Grid(dirs='xyz', properties=RXTX.anti_coupler, metal_edge_res=metal_edge_res)
+        y_mesh = -3 + self.rx_tx_spacing_x/2+2.5 - self.spacing_x
+        mesh.AddLine('y', linspace(y_mesh-self.inter_feed_width/2-epsilon/2,y_mesh+self.inter_feed_width/2+epsilon/2,nb_cells))
+        #FDTD.AddEdges2Grid(dirs='xyz', properties=RXTX.anti_coupler, metal_edge_res=metal_edge_res)
 
         mesh.AddLine('z', linspace(self.substrate_thickness,self.substrate_thickness+self.patch_thickness,self.substrate_cells+1))
         

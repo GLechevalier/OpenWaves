@@ -28,8 +28,6 @@ import math
 import numpy as np
 
 sys.path.append(os.getcwd())
-sys.path.append(r'C:\ti\radar_toolbox_3_20_00_04\tools\visualizers\Applications_Visualizer\common')
-sys.path.append(r'C:\ti\radar_toolbox_3_20_00_04\tools\mmwave_data_recorder\src')
 
 
 class FallDetector:

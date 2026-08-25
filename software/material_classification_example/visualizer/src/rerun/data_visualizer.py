@@ -13,21 +13,15 @@ Usage:
     python radarwall_rerun.py
 
 Requirements:
-    pip install bleak rerun-sdk numpy
+    pip install -e software/openwaves[ble,viz]   (from the repo root)
 """
 
 import asyncio
-import struct
 import logging
-from dataclasses import dataclass, field
-from typing import Callable, Optional
-from collections import defaultdict
 
 import numpy as np
-from bleak import BleakClient, BleakScanner
-from bleak.backends.characteristic import BleakGATTCharacteristic
 
-from software.material_classification.visualizer.src.rerun.parser import HEATMAP_FLOAT_COUNT, HEATMAP_SHAPE, RadarWallBLEClient
+from openwaves.ble import HEATMAP_FLOAT_COUNT, HEATMAP_SHAPE, RadarWallBLEClient
 
 # Optional: import rerun only when needed
 try:

@@ -1,125 +1,97 @@
-import sys
+"""Serial glue for the fall-detection examples — now a thin shim over the
+``openwaves`` package (``pip install -e software/openwaves``).
+
+Historically this file imported TI's radar_toolbox parser from a hard-coded
+``C:\\ti\\...`` install; everything it needs now lives in-repo. The public
+interface (``detect_and_open_COM_ports``, ``sendConfig``,
+``read_raw_frame_bytes`` returning a TI-style outputDict, ``sensor_stop``,
+``warm_reset_and_wait``, ``redetect_ports``, and the ``cliCom``/``dataCom``/
+``parserType`` attributes) is unchanged, so existing scripts keep working.
+
+New code should use :class:`openwaves.Radar` directly.
+"""
+
 import os
 import time
 
+import serial
 
-sys.path.append(r'C:\ti\radar_toolbox_3_20_00_04\tools\visualizers\Applications_Visualizer\common')
-sys.path.append(r'C:\ti\radar_toolbox_3_20_00_04\tools\mmwave_data_recorder\src')
+from openwaves.compat import frame_to_output_dict
+from openwaves.control.cli import RadarCli
+from openwaves.tlv.header import sync_and_read_frame
+from openwaves.tlv.registry import DEFAULT_REGISTRY
+from openwaves.transport import find_radar_ports
 
-from gui_parser import UARTParser
-from parser_lib import get_coms_ports, readAndParseUartDoubleCOMPort, sendCfg
-import parseFrame
-
-# Patch parseStandardFrame to enable point cloud output
-_original_parse = parseFrame.parseStandardFrame
-def patched_parse(frameData, pointcloud_output=False):
-    return _original_parse(frameData, pointcloud_output=True)
-parseFrame.parseStandardFrame = patched_parse
 
 class RadarParser:
     guii = {
         "alreadyStarted": "False",
-        "cfg_sdk3": "Tracking_MidBw.cfg",       
-        "cfg_sdk5": "Tracking_MidBw.cfg",   
-        "cfg_sdk6": "Tracking_MidBw.cfg",  
+        "cfg_sdk3": "Tracking_MidBw.cfg",
+        "cfg_sdk5": "Tracking_MidBw.cfg",
+        "cfg_sdk6": "Tracking_MidBw.cfg",
     }
+
     def __init__(self):
         self.detect_and_open_COM_ports()
-        return
-    
+
     # --- Detect and open COM ports ---
     def detect_and_open_COM_ports(self):
-        parserType, cliCom, dataCom = get_coms_ports(self.guii, bypass_ack=False)
-        print(f"Detected: parserType={parserType}")
-        self.parserType = parserType
-        self.cliCom = cliCom
-        self.dataCom = dataCom
-        return parserType, cliCom, dataCom
+        ports = find_radar_ports()
+        self.cliCom = serial.Serial(
+            ports.cli_port,
+            115200,
+            parity=serial.PARITY_NONE,
+            stopbits=serial.STOPBITS_ONE,
+            timeout=0.6,
+        )
+        self._open_data_port(ports.data_port)
+        print(f"Detected: parserType={self.parserType}")
+        return self.parserType, self.cliCom, self.dataCom
+
+    def _open_data_port(self, data_port):
+        """Probe the firmware ('version') to pick the data port layout."""
+        response = RadarCli.from_serial(self.cliCom).probe_version()
+        if "L684x" in response:
+            self.parserType = "DoubleCOMPort6844"
+            self.dataCom = serial.Serial(data_port, 1250000, timeout=0.6)
+        elif any(tag in response for tag in ("WR18", "WR16", "WR14")):
+            self.parserType = "DoubleCOMPort6844"
+            self.dataCom = serial.Serial(data_port, 921600, timeout=0.6)
+        else:
+            # data streams on the CLI port (e.g. material_classification fw)
+            self.parserType = "SingleCOMPort"
+            self.dataCom = self.cliCom
 
     # --- Send config ---
     def sendConfig(self, cfg_path=None):
         if cfg_path is None:
-            cfg_path = os.path.join("cfg", self.guii["cfg_sdk3"])  # Adjust to match your parserType
-        with open(cfg_path, "r") as f:
-            cfg = f.readlines()
-        sendCfg(self.cliCom, cfg, self.guii)
+            cfg_path = os.path.join("cfg", self.guii["cfg_sdk3"])
+        RadarCli.from_serial(self.cliCom).send_config(cfg_path)
         print("Config sent. Starting frame capture...")
-        return 
 
     def read_raw_frame_bytes(self):
-        # Read raw frame bytes
-        if self.parserType in ["DoubleCOMPort", "DoubleCOMPort6844"]:
-            frameData = readAndParseUartDoubleCOMPort(self.dataCom, self.parserType)
-        elif self.parserType == "SingleCOMPort":
-            frameData = readAndParseUartDoubleCOMPort(self.cliCom, self.parserType)
+        stream = self.dataCom if self.parserType != "SingleCOMPort" else self.cliCom
+        frame_bytes = sync_and_read_frame(stream)
+        frame = DEFAULT_REGISTRY.parse_frame(frame_bytes)
+        return frame_to_output_dict(frame)
 
-        # Parse frame (patched to enable pointcloud)
-        outputDict = parseFrame.parseStandardFrame(frameData)
-
-        return outputDict
-    
     def sensor_stop(self, timeout=3.0):
         """Send sensorStop and wait for Done confirmation."""
-        self.cliCom.reset_input_buffer()
-        self.cliCom.write(b'sensorStop 0\n')
-        
-        buffer = b''
-        start = time.time()
-        while time.time() - start < timeout:
-            data = self.cliCom.read(self.cliCom.in_waiting or 1)
-            clean = data.replace(b'\x00', b'')
-            if clean:
-                buffer += clean
-            # Wait for Done AND the next prompt before proceeding
-            if b'Done' in buffer and b'mmwDemo:/>' in buffer:
-                print("✓ Sensor stopped")
-                time.sleep(0.2)  # small margin after prompt
-                return True
-            time.sleep(0.05)
-        
-        raise TimeoutError("sensorStop did not confirm")
+        RadarCli.from_serial(self.cliCom).sensor_stop(timeout=timeout)
+        print("\u2713 Sensor stopped")
+        return True
 
     def warm_reset_and_wait(self):
         print("Sending warm reset...")
-        port_name = self.cliCom.port
-        
-        # Send reset char by char at current baudrate
-        cmd = 'sensorWarmRst 1\n'
-        self.cliCom.reset_input_buffer()
-        if self.cliCom.baudrate == 1250000:
-            for char in cmd:
-                time.sleep(0.001)
-                self.cliCom.write(char.encode())
-        else:
-            self.cliCom.write(cmd.encode())
-        
-        # Wait for null bytes confirming reset fired
-        print("  Waiting for null bytes...")
-        start = time.time()
-        while time.time() - start < 3.0:
-            raw = self.cliCom.read(self.cliCom.in_waiting or 1)
-            if b'\x00' in raw:
-                print("  ✓ Reset firing")
-                break
-            time.sleep(0.01)
-        
-        # Close ports cleanly
-        print("  Closing ports...")
-        self.cliCom.close()
+        RadarCli.from_serial(self.cliCom).warm_reset()  # closes cliCom
         if self.dataCom and self.dataCom is not self.cliCom:
             self.dataCom.close()
-        
         time.sleep(0.5)
-        print("  ✓ Ports closed, letting device boot...")
-    
+        print("  \u2713 Ports closed, letting device boot...")
+
     def redetect_ports(self):
-        """Re-run port detection after warm reset — mirrors what happens on first boot."""
+        """Re-run port detection after warm reset — mirrors first boot."""
         print("  Re-detecting COM ports...")
         parserType, cliCom, dataCom = self.detect_and_open_COM_ports()
-        print(f"  ✓ Redetected: parserType={parserType}")
-        self.parserType = parserType
-        self.cliCom = cliCom
-        self.dataCom = dataCom
+        print(f"  \u2713 Redetected: parserType={parserType}")
         return parserType, cliCom, dataCom
-    
-    

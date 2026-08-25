@@ -1,2 +1,14 @@
 **/__pycache__/
 .venv/
+*.egg-info/
+.pytest_cache/
+dist/
+build/
+
+# CCS build artifacts (rebuilt locally; the prebuilt Release .appimage ships
+# inside the openwaves package at software/openwaves/src/openwaves/firmware/)
+hardware/firmware/IWRL6432BOOST_firmware/*/Debug/
+hardware/firmware/IWRL6432BOOST_firmware/*/Release/
+
+# Local captures/recordings from 'openwaves record'
+capture.bin

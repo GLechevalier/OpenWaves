@@ -1,0 +1,119 @@
+{
+    "version": "2.0.0",
+    "options": {
+        "cwd": "${workspaceFolder}"
+    },
+    "tasks": [
+        {
+            "label": "Install openwaves (editable, all extras)",
+            "detail": "Bootstrap a fresh clone: installs the Python package with viz/ble/ml/dev extras into .venv",
+            "type": "shell",
+            "command": "${command:python.interpreterPath}",
+            "args": ["-m", "pip", "install", "-e", "software/openwaves[viz,ble,ml,dev]"],
+            "group": { "kind": "build", "isDefault": true },
+            "presentation": { "reveal": "always", "panel": "dedicated" }
+        },
+        {
+            "label": "Radar: Flash prebuilt firmware",
+            "detail": "Flash the bundled material-classification firmware over USB (follow the SOP switch checklist it prints)",
+            "type": "shell",
+            "command": "${command:python.interpreterPath}",
+            "args": ["-m", "openwaves", "flash"],
+            "presentation": { "reveal": "always", "panel": "dedicated", "focus": true },
+            "problemMatcher": []
+        },
+        {
+            "label": "Radar: Flash custom appimage...",
+            "detail": "Flash a specific .appimage (e.g. your own CCS build)",
+            "type": "shell",
+            "command": "${command:python.interpreterPath}",
+            "args": ["-m", "openwaves", "flash", "${input:appimagePath}"],
+            "presentation": { "reveal": "always", "panel": "dedicated", "focus": true },
+            "problemMatcher": []
+        },
+        {
+            "label": "Radar: List ports",
+            "type": "shell",
+            "command": "${command:python.interpreterPath}",
+            "args": ["-m", "openwaves", "ports"],
+            "presentation": { "reveal": "always", "panel": "shared" },
+            "problemMatcher": []
+        },
+        {
+            "label": "Radar: Stream frames",
+            "detail": "Configure the sensor with a .cfg and print live frames",
+            "type": "shell",
+            "command": "${command:python.interpreterPath}",
+            "args": ["-m", "openwaves", "stream", "--cfg", "${input:cfgFile}"],
+            "presentation": { "reveal": "always", "panel": "dedicated" },
+            "problemMatcher": []
+        },
+        {
+            "label": "Radar: Record raw UART capture",
+            "detail": "10s raw capture (parser test fixtures, offline replay)",
+            "type": "shell",
+            "command": "${command:python.interpreterPath}",
+            "args": ["-m", "openwaves", "record", "capture.bin", "--raw", "--cfg", "${input:cfgFile}"],
+            "presentation": { "reveal": "always", "panel": "dedicated" },
+            "problemMatcher": []
+        },
+        {
+            "label": "Radar: Live point cloud viz (rerun)",
+            "detail": "Real-time point cloud in the Rerun viewer (needs the viz extra + MPD firmware)",
+            "type": "shell",
+            "command": "${command:python.interpreterPath}",
+            "args": ["src/real_time/radar_point_cloud_viz.py"],
+            "options": { "cwd": "${workspaceFolder}/software/fall_detection_example" },
+            "presentation": { "reveal": "always", "panel": "dedicated" },
+            "problemMatcher": []
+        },
+        {
+            "label": "Radar: Serial monitor (nff)",
+            "detail": "Watch the radar CLI UART with nff (https://github.com/GLechevalier/nff)",
+            "type": "shell",
+            "command": "nff",
+            "args": ["monitor"],
+            "presentation": { "reveal": "always", "panel": "dedicated" },
+            "problemMatcher": []
+        },
+        {
+            "label": "Radar: Interactive CLI terminal",
+            "type": "shell",
+            "command": "${command:python.interpreterPath}",
+            "args": ["-m", "openwaves", "term"],
+            "presentation": { "reveal": "always", "panel": "dedicated", "focus": true },
+            "problemMatcher": []
+        },
+        {
+            "label": "openwaves: Run tests",
+            "type": "shell",
+            "command": "${command:python.interpreterPath}",
+            "args": ["-m", "pytest", "software/openwaves/tests", "-q"],
+            "group": "test",
+            "presentation": { "reveal": "always", "panel": "shared" },
+            "problemMatcher": []
+        }
+    ],
+    "inputs": [
+        {
+            "id": "appimagePath",
+            "type": "promptString",
+            "description": "Path to the .appimage to flash",
+            "default": "hardware/firmware/IWRL6432BOOST_firmware/material_classification/Release/mmwave_demo.Release.appimage"
+        },
+        {
+            "id": "cfgFile",
+            "type": "pickString",
+            "description": "Radar configuration",
+            "options": [
+                "software/fall_detection_example/cfg/Tracking_MidBw.cfg",
+                "software/fall_detection_example/cfg/StaticConfig.cfg",
+                "software/fall_detection_example/cfg/StaticConfig2.cfg",
+                "software/fall_detection_example/cfg/StaticConfig3.cfg",
+                "software/fall_detection_example/cfg/6432BOOST_MPD_PointCloudOnly_15FPS.cfg",
+                "software/openwaves/src/openwaves/config/profiles/material_classification_default.cfg"
+            ],
+            "default": "software/fall_detection_example/cfg/Tracking_MidBw.cfg"
+        }
+    ]
+}

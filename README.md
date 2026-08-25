@@ -2,7 +2,7 @@
 
 ![OpenWaves radar](public/images/Radar.png)
 
-[docs](docs/README.md) · [material classification](software/material_classification/) · [fall detection](software/fall_detection/) · [hardware](hardware/)
+[docs](docs/README.md) · [python package](software/openwaves/) · [material classification](software/material_classification_example/) · [fall detection](software/fall_detection_example/) · [hardware](hardware/)
 
 Everything you need to get started with mmWave radar: an electromagnetic simulation you can play with, the antenna, electronics and printable casing, and the software to run two end-to-end demos : material classification and fall detection.
 
@@ -10,8 +10,9 @@ This repo is the open-source release of the radar behind [*I built a mmWave mate
 
 ## Features
 
-- **Material classification** — Capon 3D beamforming heatmaps streamed over BLE from the radar, visualized live in [Rerun](https://rerun.io), and classified with a PyTorch neural network. `software/material_classification/`
-- **Fall detection** — real-time point-cloud tracking on a TI IWRL6432BOOST, with a CNN fall classifier and dual-radar room visualization. `software/fall_detection/`
+- **`openwaves` Python package** — plug the radar in via USB and drive everything from Python: flash firmware (`openwaves flash`, no TI software needed), send configurations, stream typed point-cloud/heatmap frames. `software/openwaves/`
+- **Material classification** — Capon 3D beamforming heatmaps streamed over BLE from the radar, visualized live in [Rerun](https://rerun.io), and classified with a PyTorch neural network. `software/material_classification_example/`
+- **Fall detection** — real-time point-cloud tracking on a TI IWRL6432BOOST, with a CNN fall classifier and dual-radar room visualization. `software/fall_detection_example/`
 - **Electromagnetic simulation** — antenna, emission and reflection sims built on [openEMS](https://www.openems.de). `hardware/electronics/electromagnetic_simulation/`
 - **Hardware included** — antenna design, firmware, and a 3D-printable casing. `hardware/`
 - **Recorded data** — `.rrd` / `.npy` radar captures in `software/data/`, so every demo runs without a radar on your desk.
@@ -25,10 +26,23 @@ Prefer to source everything yourself? The repo has you covered: the full [bill o
 ## Setup
 
 ```
-pip install -r requirements.txt
+pip install -e software/openwaves[viz,ble]
 ```
 
-For the simulations, also install openEMS & CSXCAD: download the [openEMS release](https://github.com/thliebig/openEMS-Project/releases), unzip it to your `user/opt` dir, then `pip install` the `csxcad` and `openems` wheels from its `python/` folder — full tutorial [here](https://docs.openems.de/python/install.html).
+Then plug the board in and check it's found:
+
+```
+openwaves ports     # list COM ports, mark the radar
+openwaves flash     # flash the prebuilt firmware (guided, USB only)
+```
+
+In VSCode, **Ctrl+Shift+B** installs everything and `.vscode/` ships one-click
+tasks for flashing, streaming and recording. Full walkthrough:
+[docs/getting-started.md](docs/getting-started.md).
+
+`pip install -r requirements.txt` additionally pulls the ML and simulation
+dependencies for the demos. For the electromagnetic simulations, also
+install openEMS & CSXCAD: download the [openEMS release](https://github.com/thliebig/openEMS-Project/releases), unzip it to your `user/opt` dir, then `pip install` the `csxcad` and `openems` wheels from its `python/` folder — full tutorial [here](https://docs.openems.de/python/install.html).
 
 ## Docs
 

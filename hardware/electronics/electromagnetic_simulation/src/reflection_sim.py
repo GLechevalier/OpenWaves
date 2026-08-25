@@ -1,7 +1,8 @@
 import sys
 import os
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, PROJECT_ROOT)
 
 from src.utils.utils import TimeSeries
 from src.emission_sim import ChirpGenerator
@@ -9,6 +10,18 @@ from src.antenna_sim import ElectromagneticSim
 import numpy as np
 import matplotlib.pyplot as plt
 import tempfile
+
+
+def resolve_saved_path(path):
+    """
+    Anchor a relative save path to the project root and make sure its
+    directory exists. openEMS chdirs into its Sim_Path during FDTD.Run and
+    never restores the cwd, so relative paths cannot be trusted here.
+    """
+    if not os.path.isabs(path):
+        path = os.path.join(PROJECT_ROOT, path)
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    return path
 
 class RadarResponseSynthesizer:
     def __init__(self, transfer_function_array, f, distance_first_object):
@@ -277,6 +290,7 @@ class SingleSignalReflectionSim(TimeSeries):
         :param self: Description
         :param force_recalculate: Description
         """
+        save_path = resolve_saved_path(save_path)
         if os.path.exists(save_path) and not force_recalculate:
             rx_signal = np.load(save_path)
         else:
@@ -302,7 +316,7 @@ class SingleSignalReflectionSim(TimeSeries):
         rx_signal = synthesizer.apply_to_chirp_direct(self.TX_chirp)
         rx_signal = synthesizer.sum_signals(rx_signal)
         if save:
-            np.save(save_path, rx_signal)
+            np.save(resolve_saved_path(save_path), rx_signal)
 
         return rx_signal
         
@@ -369,22 +383,23 @@ class FullReflectionSim(TimeSeries):
         :param self: Description
         :param force_recalculate: Description
         """
-        if os.path.exists('saved/rx_signal_plus.npy') and not force_recalculate:
-            rx_signal_plus = np.load('saved/rx_signal_plus.npy')
+        save_path_plus = resolve_saved_path('saved/rx_signal_plus.npy')
+        save_path_moins = resolve_saved_path('saved/rx_signal_moins.npy')
 
-        if os.path.exists('saved/rx_signal_moins.npy') and not force_recalculate:
-            rx_signal_moins = np.load('saved/rx_signal_moins.npy')
+        if os.path.exists(save_path_plus) and os.path.exists(save_path_moins) and not force_recalculate:
+            rx_signal_plus = np.load(save_path_plus)
+            rx_signal_moins = np.load(save_path_moins)
         else:
             # Calculate the array
             rx_signal_plus = self.compute_reflection(
-                transfer_function=self.transfer_function_array_plus, 
-                save=True, 
-                save_path="saved/rx_signal_plus.npy"
+                transfer_function=self.transfer_function_array_plus,
+                save=True,
+                save_path=save_path_plus
             )
             rx_signal_moins = self.compute_reflection(
-                transfer_function=self.transfer_function_array_moins, 
-                save=True, 
-                save_path="saved/rx_signal_moins.npy"
+                transfer_function=self.transfer_function_array_moins,
+                save=True,
+                save_path=save_path_moins
             )
 
         self.rx_signal_plus = rx_signal_plus
@@ -407,7 +422,7 @@ class FullReflectionSim(TimeSeries):
         rx_signal = synthesizer.apply_to_chirp_direct(self.TX_chirp)
         rx_signal = synthesizer.sum_signals(rx_signal)
         if save:
-            np.save(save_path, rx_signal)
+            np.save(resolve_saved_path(save_path), rx_signal)
         return rx_signal
         
     def plot_reflection_sim(self):
