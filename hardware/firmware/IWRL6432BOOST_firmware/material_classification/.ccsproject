@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?ccsproject version="1.0"?>
+<projectOptions>
+	<ccsVariant value="0:Eclipse-based"/>
+	<ccsVersion value="12.7.1"/>
+	<deviceVariant value="Cortex M.IWRL6432"/>
+	<deviceFamily value="TMS470"/>
+	<deviceEndianness value="little"/>
+	<codegenToolVersion value="TICLANG_3.2.2.LTS"/>
+	<isElfFormat value="true"/>
+	<connection value="common/targetdb/connections/TIXDS110_Connection.xml"/>
+	<rts value=""/>
+	<createSlaveProjects value=""/>
+	<ignoreDefaultDeviceSettings value="true"/>
+	<ignoreDefaultCCSSettings value="true"/>
+	<templateProperties value="id=example.projectspec.mmwave_demo_xwrL64xx-evm_m4fss0-0_freertos_ti-arm-clang"/>
+	<origin value="C:\ti\MMWAVE_L_SDK_05_05_03_00\examples\mmw_demo\mmwave_demo\xwrL64xx-evm\m4fss0-0_freertos\ti-arm-clang\example.projectspec"/>
+	<filesToOpen value=""/>
+</projectOptions>
