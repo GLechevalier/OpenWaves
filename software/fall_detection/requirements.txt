@@ -1,0 +1,10 @@
+rerun-sdk
+matplotlib
+numpy
+pyserial
+json_fix
+joblib
+scikit-learn
+pandas
+torch
+xgboost
