@@ -2,7 +2,7 @@
 
 What every chirp/frame/DPC parameter does and the value the OpenWaves
 firmware currently uses. Companion to [cli-commands.md](../cli-commands.md)
-(the CLI syntax) and [mmwave-concepts.md](../mmwave-concepts.md) (the
+(the CLI syntax) and [mmwave-concepts.md](../physics/mmwave-concepts.md) (the
 theory). Values were derived with TI's sensing estimator.
 
 ## chirpComnCfg

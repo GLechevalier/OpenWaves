@@ -43,7 +43,7 @@ application binary (RPRC), the RF-firmware patch, and CRCs, packed as
 `META_IMAGE1` for the bootloader. The package bundles the Release build of
 the in-repo firmware (`openwaves.firmware.get_bundled_appimage()` gives its
 path). To build your own, see the
-[firmware README](../hardware/firmware/IWRL6432BOOST_firmware/README.md).
+[firmware README](../../hardware/firmware/IWRL6432BOOST_firmware/README.md).
 
 ## Flashing from Python
 

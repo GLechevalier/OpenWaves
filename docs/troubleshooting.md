@@ -18,7 +18,7 @@
 ## CLI does not answer (`CliTimeoutError`)
 
 - SOP switches still in flash mode → set to **SOP_MODE2** (S1.1 ON,
-  S1.2 OFF) and power-cycle ([table](flashing.md#the-sop-switches-the-one-manual-step)).
+  S1.2 OFF) and power-cycle ([table](iwrl6432-doc.md/flashing.md#the-sop-switches-the-one-manual-step)).
 - The sensor is already streaming on that port (single-port firmware):
   binary data isn't a prompt. `openwaves reset` (warm reset) brings the
   CLI back.
@@ -63,7 +63,7 @@ ports drop and re-enumerate (possibly with new numbers). Use
 
 ## Flashing
 
-See the [flashing guide](flashing.md#troubleshooting). Golden rule: MODE1
+See the [flashing guide](iwrl6432-doc.md/flashing.md#troubleshooting). Golden rule: MODE1
 + power-cycle to flash, MODE2 + power-cycle to run.
 
 ## Python environment

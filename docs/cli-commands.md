@@ -37,7 +37,7 @@ data (`MATERIAL_CLASSIFICATION_PROFILE`, `MPD_PROFILE`).
 
 ## RF front-end / chirp timing
 
-These define the FMCW waveform — see [mmWave concepts](mmwave-concepts.md)
+These define the FMCW waveform — see [mmWave concepts](physics/mmwave-concepts.md)
 for how they map to range/velocity resolution.
 
 | Command & arguments | Meaning | Typed model |
@@ -63,7 +63,7 @@ for how they map to range/velocity resolution.
 | `rangeSelCfg <minMeters> <maxMeters>` | Range gate. | `RangeSelCfg` |
 | `clutterRemoval <0/1>` | Remove static clutter (zero-Doppler bin). Disable it to see walls/furniture. | `ClutterRemoval` |
 | `sensorPosition <xOffset> <yOffset> <zOffset> <azimuthTilt> <elevationTilt>` | Sensor mounting pose (m, deg) used to put the point cloud in room coordinates. | `SensorPosition` |
-| `guiMonitor <pointCloud> <rangeProfile> <noiseProfile> <rangeAzimuthHeatMap> <rangeDopplerHeatMap> <statsInfo> <presenceInfo> <adcSamples> <trackerInfo> <microDopplerInfo> <classifierInfo>` | Which TLVs to stream (0 = off; pointCloud 1 = uncompressed, 2 = compressed). The MPD demo takes an extra 12th flag. Maps to the [TLV types](tlv-format.md). | `GuiMonitor` |
+| `guiMonitor <pointCloud> <rangeProfile> <noiseProfile> <rangeAzimuthHeatMap> <rangeDopplerHeatMap> <statsInfo> <presenceInfo> <adcSamples> <trackerInfo> <microDopplerInfo> <classifierInfo>` | Which TLVs to stream (0 = off; pointCloud 1 = uncompressed, 2 = compressed). The MPD demo takes an extra 12th flag. Maps to the [TLV types](iwrl6432-doc.md/tlv-format.md). | `GuiMonitor` |
 | `adcDataSource <0-DFP, 1-File> <fileName>` | Live RF or replay from an ADC file (bench testing). | — |
 | `adcLogging <0/1/2> ...` | Stream raw ADC out (DCA1000 or SPI). | — |
 | `compressionCfg <enabled> <compressionRatio>` | Radar-cube compression (material_classification firmware). | — |

@@ -79,4 +79,4 @@ over BLE via the RadarWall bridge (`openwaves.ble`).
    in `mmwDemo_TransmitProcessedOutputTask` (see how type 601 does it in
    `mmwave_demo.c`).
 2. Host: `DEFAULT_REGISTRY.register(your_id, your_parser)` — see the
-   [Python API](python-api.md#custom-tlv-types).
+   [Python API](../python-api.md#custom-tlv-types).

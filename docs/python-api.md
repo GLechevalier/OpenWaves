@@ -136,7 +136,7 @@ from openwaves import flash_firmware
 flash_firmware()          # bundled firmware, guided SOP flow
 ```
 
-See the [flashing guide](flashing.md).
+See the [flashing guide](iwrl6432-doc.md/flashing.md).
 
 ## BLE (RadarWall ESP32 bridge)
 

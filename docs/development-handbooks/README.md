@@ -1,23 +1,20 @@
-# R&D notes
+# Development handbooks
 
-Summaries of the working documents behind the OpenWaves radar: course notes,
-chip references, theory, and the development logs that led to the current
-design. These are condensed from the original R&D docs, kept here so the
-reasoning behind the hardware and firmware choices stays in the repo.
+The condensed lab notebooks behind OpenWaves: what was built, in what
+order, what broke, and how it got fixed. Read these to understand why the
+firmware and the simulation look the way they do, or to retrace the steps
+yourself.
 
-## Theory and courses
-
-- [Active devices](active-devices.md) - semiconductors, N/P doping, the PN junction, FET vs BJT, and which material system (Si, GaAs, GaN, InP) fits which RF application.
-- [Transceiver architecture](transceiver-architecture.md) - why receivers look the way they do: Friis formula, heterodyne downconversion, the image problem, PLLs.
-- [Wall radar theory](wall-radar-theory.md) - the physics of measuring wall thickness and material type with electromagnetic reflectometry.
-
-## IWRL6432 references
-
-- [IWRL6432 programming notes](iwrl6432-programming.md) - the SDK functions, semaphores, memory map and registers you touch when writing firmware.
-- [IWRL6432 config reference](iwrl6432-config-reference.md) - every chirp/frame/DPC CLI parameter, what it does, and the values the OpenWaves firmware uses.
-
-## Development history
-
-- [Roadmap and architecture study](development-roadmap.md) - the original plan, the component/architecture trade study, and why a 60 GHz monostatic FMCW radar-on-chip won.
-- [Phase 1 log](phase1-log.md) - from unboxing the IWRL6432BOOST to a working end-to-end demo: custom firmware, Capon heatmaps over TLV, ESP32 BLE bridge, cloud classifier, mobile app.
-- [Phase 1.5 log](phase1_5-simulation.md) - building the openEMS electromagnetic simulation to generate training data without a bench.
+- [Radar development handbook](development-handbook-radar.md) — from
+  unboxing the IWRL6432BOOST to a full end-to-end chain in about five
+  weeks: forking the TI demo into a custom firmware, rebuilding the DPC
+  around Capon 3D heatmaps, streaming them over TLV, the ESP32 BLE
+  bridge, the cloud classifier and the mobile app. Includes the
+  beamforming trade study and the outcome vs the success criteria.
+- [Electromagnetic simulation handbook](development-handbook-simulation.md)
+  — building the openEMS simulation that generates training data without
+  a bench: designing the 60 GHz patch antenna array and validating it
+  against TI's measured patterns, replicating the hardware scene, the
+  Gaussian-pulse transfer-function trick that turned 9-day FDTD runs
+  into matrix multiplications, and the TX2 excitation bug hunt. Code in
+  `hardware/electronics/electromagnetic_simulation/`.

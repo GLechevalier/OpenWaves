@@ -14,7 +14,7 @@ openwaves flash
 ```
 
 The command walks you through the SOP switch flow (MODE1 to flash,
-MODE2 to run) — full guide in [docs/flashing.md](../../../docs/flashing.md).
+MODE2 to run) — full guide in [docs/flashing.md](../../../docs/iwrl6432-doc.md/flashing.md).
 To flash your own build: `openwaves flash path\to\your.appimage`.
 
 <details>

@@ -44,7 +44,7 @@ the `dialout` group if you get permission errors (see
 
 A factory-fresh board runs TI's out-of-box demo. To flash either the
 OpenWaves material-classification firmware (bundled with the package) or any
-other `.appimage`, follow the [flashing guide](flashing.md) — short version:
+other `.appimage`, follow the [flashing guide](iwrl6432-doc.md/flashing.md) — short version:
 
 ```bash
 openwaves flash            # bundled firmware; the command walks you through the SOP switches
