@@ -27,7 +27,7 @@ import numpy as np
 from bleak import BleakClient, BleakScanner
 from bleak.backends.characteristic import BleakGATTCharacteristic
 
-from parser import HEATMAP_FLOAT_COUNT, HEATMAP_SHAPE, RadarWallBLEClient
+from software.material_classification.visualizer.src.rerun.parser import HEATMAP_FLOAT_COUNT, HEATMAP_SHAPE, RadarWallBLEClient
 
 # Optional: import rerun only when needed
 try:

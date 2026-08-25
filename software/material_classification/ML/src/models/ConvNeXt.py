@@ -18,7 +18,7 @@ Key borrowed ideas:
 
 import torch
 import torch.nn as nn
-from src.models.abstract_module import AbstractModule
+from software.material_classification.ML.src.models.abstract_module import AbstractModule
 
 # ============================================================
 # Constants
