@@ -6,10 +6,10 @@ Firmware for the TI [IWRL6432BOOST](https://www.ti.com/tool/IWRL6432BOOST) mmWav
 
 No compilation and **no TI software** needed — the ready-to-flash Release
 image ships inside the `openwaves` Python package
-(`software/openwaves/src/openwaves/firmware/mmwave_demo.Release.appimage`):
+(`software/pyopenwaves/src/openwaves/firmware/mmwave_demo.Release.appimage`):
 
 ```
-pip install -e software/openwaves      # from the repo root, once
+pip install -e software/pyopenwaves      # from the repo root, once
 openwaves flash
 ```
 
@@ -51,7 +51,7 @@ installed at `C:\ti\`.
 1. Copy [`material_classification/caponBeamforming2D_remake/`](material_classification/caponBeamforming2D_remake/) to `C:\ti\MMWAVE_L_SDK_05_05_03_00\source\alg\caponBeamforming2D_remake\` — the project references it there.
 2. Import `material_classification/` into Code Composer Studio (Project → Import CCS Projects).
 3. Build the **Release** configuration — it produces `Release/mmwave_demo.Release.appimage` (build output is gitignored).
-4. Flash it: `openwaves flash material_classification\Release\mmwave_demo.Release.appimage`. If you want the new build to ship with the Python package, also copy it over `software/openwaves/src/openwaves/firmware/mmwave_demo.Release.appimage`.
+4. Flash it: `openwaves flash material_classification\Release\mmwave_demo.Release.appimage`. If you want the new build to ship with the Python package, also copy it over `software/pyopenwaves/src/openwaves/firmware/mmwave_demo.Release.appimage`.
 
 ## Official docs
 

@@ -3,9 +3,9 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "openwaves"
+name = "pyopenwaves"
 version = "0.1.0"
-description = "Python toolkit for the TI IWRL6432BOOST mmWave radar (OpenWaves): flash, configure, stream and parse — no TI software required"
+description = "Python toolkit for the TI IWRL6432BOOST mmWave radar (OpenWaves): flash, configure, stream and parse — no TI software required. Imports as 'openwaves'."
 readme = "README.md"
 license = "GPL-3.0-or-later"
 requires-python = ">=3.10"

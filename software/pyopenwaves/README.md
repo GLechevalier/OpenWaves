@@ -6,7 +6,7 @@ send configurations, stream and parse TLV frames — **no TI software
 required**.
 
 ```bash
-pip install -e software/openwaves[viz,ble]   # from the OpenWaves repo root
+pip install -e software/pyopenwaves[viz,ble]   # from the OpenWaves repo root
 ```
 
 ```python

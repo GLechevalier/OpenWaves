@@ -1,5 +1,5 @@
 """Serial glue for the fall-detection examples — now a thin shim over the
-``openwaves`` package (``pip install -e software/openwaves``).
+``openwaves`` package (``pip install -e software/pyopenwaves``).
 
 Historically this file imported TI's radar_toolbox parser from a hard-coded
 ``C:\\ti\\...`` install; everything it needs now lives in-repo. The public

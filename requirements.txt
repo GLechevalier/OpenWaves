@@ -1,11 +1,11 @@
 # Python version: 3.12+ recommended (repo developed on 3.14)
 #
-# The openwaves package (software/openwaves) is the single source of truth
+# The openwaves package (software/pyopenwaves) is the single source of truth
 # for dependencies. Extras:
 #   viz = rerun-sdk + matplotlib     ble = bleak (RadarWall ESP32 bridge)
 #   ml  = scikit-learn, joblib, pandas, xgboost
 #   dev = pytest, ruff
--e software/openwaves[viz,ble,ml,dev]
+-e software/pyopenwaves[viz,ble,ml,dev]
 
 # Electromagnetic simulation (hardware/electronics/electromagnetic_simulation)
 # — openEMS/CSXCAD wheels are installed separately, see the root README.

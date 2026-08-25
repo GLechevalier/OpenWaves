@@ -2,7 +2,7 @@
 
 Skipped unless a board is plugged in AND OPENWAVES_HIL=1 is set:
 
-    OPENWAVES_HIL=1 pytest software/openwaves/tests/hil -v
+    OPENWAVES_HIL=1 pytest software/pyopenwaves/tests/hil -v
 
 Exercises: port detection -> configure -> start -> 10 monotonic frames ->
 stop -> warm reset -> redetect.

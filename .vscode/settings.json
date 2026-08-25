@@ -1,7 +1,7 @@
 {
     "python.defaultInterpreterPath": "${workspaceFolder}/.venv/Scripts/python.exe",
     "python.testing.pytestEnabled": true,
-    "python.testing.pytestArgs": ["software/openwaves/tests"],
+    "python.testing.pytestArgs": ["software/pyopenwaves/tests"],
     "files.exclude": {
         "**/__pycache__": true,
         "**/*.egg-info": true

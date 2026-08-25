@@ -19,9 +19,9 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install openwaves
-        run: pip install -e software/openwaves[dev]
+        run: pip install -e software/pyopenwaves[dev]
       - name: Run tests
-        run: pytest software/openwaves/tests -q
+        run: pytest software/pyopenwaves/tests -q
 
   build-wheel:
     runs-on: ubuntu-latest
@@ -33,10 +33,10 @@ jobs:
       - name: Build
         run: |
           pip install build twine
-          python -m build software/openwaves
+          python -m build software/pyopenwaves
       - name: Check
-        run: twine check software/openwaves/dist/*
+        run: twine check software/pyopenwaves/dist/*
       - uses: actions/upload-artifact@v4
         with:
           name: openwaves-wheel
-          path: software/openwaves/dist/*.whl
+          path: software/pyopenwaves/dist/*.whl

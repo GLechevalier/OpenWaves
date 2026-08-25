@@ -70,8 +70,8 @@ See the [flashing guide](flashing.md#troubleshooting). Golden rule: MODE1
 
 - `openwaves` needs Python ≥ 3.10; the demos' extras (torch, rerun-sdk,
   bleak) may lag the newest interpreter — 3.12 is the safe choice.
-- `ImportError: bleak` → `pip install -e software/openwaves[ble]`.
-- Rerun viewer doesn't open → `pip install -e software/openwaves[viz]`,
+- `ImportError: bleak` → `pip install -e software/pyopenwaves[ble]`.
+- Rerun viewer doesn't open → `pip install -e software/pyopenwaves[viz]`,
   and run scripts from their example directory (they use relative paths).
 
 ## Still stuck?

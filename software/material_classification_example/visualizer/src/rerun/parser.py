@@ -1,5 +1,5 @@
 """Compatibility shim — the RadarWall BLE client now lives in the
-``openwaves`` package (``pip install -e software/openwaves[ble]``).
+``openwaves`` package (``pip install -e software/pyopenwaves[ble]``).
 
 Import from :mod:`openwaves.ble` in new code.
 """

@@ -2,7 +2,7 @@
 
 ![OpenWaves radar](public/images/Radar.png)
 
-[docs](docs/README.md) · [python package](software/openwaves/) · [material classification](software/material_classification_example/) · [fall detection](software/fall_detection_example/) · [hardware](hardware/)
+[docs](docs/README.md) · [python package](software/pyopenwaves/) · [material classification](software/material_classification_example/) · [fall detection](software/fall_detection_example/) · [hardware](hardware/)
 
 Everything you need to get started with mmWave radar: an electromagnetic simulation you can play with, the antenna, electronics and printable casing, and the software to run two end-to-end demos : material classification and fall detection.
 
@@ -10,7 +10,7 @@ This repo is the open-source release of the radar behind [*I built a mmWave mate
 
 ## Features
 
-- **`openwaves` Python package** — plug the radar in via USB and drive everything from Python: flash firmware (`openwaves flash`, no TI software needed), send configurations, stream typed point-cloud/heatmap frames. `software/openwaves/`
+- **`openwaves` Python package** — plug the radar in via USB and drive everything from Python: flash firmware (`openwaves flash`, no TI software needed), send configurations, stream typed point-cloud/heatmap frames. `software/pyopenwaves/`
 - **Material classification** — Capon 3D beamforming heatmaps streamed over BLE from the radar, visualized live in [Rerun](https://rerun.io), and classified with a PyTorch neural network. `software/material_classification_example/`
 - **Fall detection** — real-time point-cloud tracking on a TI IWRL6432BOOST, with a CNN fall classifier and dual-radar room visualization. `software/fall_detection_example/`
 - **Electromagnetic simulation** — antenna, emission and reflection sims built on [openEMS](https://www.openems.de). `hardware/electronics/electromagnetic_simulation/`
@@ -26,7 +26,7 @@ Prefer to source everything yourself? The repo has you covered: the full [bill o
 ## Setup
 
 ```
-pip install -e software/openwaves[viz,ble]
+pip install -e software/pyopenwaves[viz,ble]
 ```
 
 Then plug the board in and check it's found:

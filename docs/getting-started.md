@@ -11,7 +11,7 @@ git clone https://github.com/GLechevalier/OpenWaves
 cd OpenWaves
 python -m venv .venv
 .venv\Scripts\activate            # Windows   (source .venv/bin/activate on Linux/macOS)
-pip install -e software/openwaves[viz,ble]
+pip install -e software/pyopenwaves[viz,ble]
 ```
 
 Using VSCode? Open the repo folder and press **Ctrl+Shift+B** — the default

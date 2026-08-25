@@ -13,7 +13,7 @@ Usage:
     python radarwall_rerun.py
 
 Requirements:
-    pip install -e software/openwaves[ble,viz]   (from the repo root)
+    pip install -e software/pyopenwaves[ble,viz]   (from the repo root)
 """
 
 import asyncio

@@ -21,6 +21,10 @@ radar frames.
 - Fall detection — `software/fall_detection_example/` (point cloud + tracking on TI's Motion-and-Presence firmware).
 - Material classification — `software/material_classification_example/` (capon 3D heatmaps over BLE → Rerun → PyTorch).
 
+## R&D notes
+
+- [notes/](notes/README.md) — summaries of the R&D documents behind the project: device physics and transceiver courses, wall-radar theory, IWRL6432 programming and config references, and the development logs (roadmap, Phase 1, simulation).
+
 ## Hardware
 
 - [Firmware](../hardware/firmware/IWRL6432BOOST_firmware/README.md) — the custom capon-beamforming firmware, rebuilding it with CCS.

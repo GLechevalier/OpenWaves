@@ -13,7 +13,7 @@ the material-classification firmware bundled with `openwaves flash`. See
 ## Setup
 
 ```bash
-pip install -e software/openwaves[viz,ml]     # from the repo root
+pip install -e software/pyopenwaves[viz,ml]     # from the repo root
 pip install torch json_fix
 ```
 

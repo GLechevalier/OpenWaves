@@ -6,7 +6,7 @@ dist/
 build/
 
 # CCS build artifacts (rebuilt locally; the prebuilt Release .appimage ships
-# inside the openwaves package at software/openwaves/src/openwaves/firmware/)
+# inside the openwaves package at software/pyopenwaves/src/openwaves/firmware/)
 hardware/firmware/IWRL6432BOOST_firmware/*/Debug/
 hardware/firmware/IWRL6432BOOST_firmware/*/Release/
 

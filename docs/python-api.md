@@ -1,6 +1,6 @@
 # Python API
 
-`pip install -e software/openwaves` gives you the `openwaves` package. Core
+`pip install -e software/pyopenwaves` gives you the `openwaves` package. Core
 dependencies are just `numpy` + `pyserial`; extras: `[viz]` (rerun,
 matplotlib), `[ble]` (bleak), `[ml]` (sklearn, xgboost, pandas, joblib),
 `[dev]` (pytest, ruff).
