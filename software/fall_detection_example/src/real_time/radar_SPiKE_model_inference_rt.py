@@ -23,16 +23,18 @@ import numpy as np
 import torch
 import rerun as rr
 
+SPIKE_DIR = os.environ.get("SPIKE_DIR")
+if not SPIKE_DIR:
+    sys.exit("Set the SPIKE_DIR environment variable to your SPiKE workspace "
+             "(see 'Pose estimation (SPiKE)' in the fall detection README).")
 sys.path.append(os.getcwd())
-sys.path.append(r"D:\IntraMap\Carto\R&D\Radar\Software\SPiKE_test")
-sys.path.append(r"D:\IntraMap\Carto\R&D\Radar\Software\SPiKE_test\SPiKE")
+sys.path.append(SPIKE_DIR)
+sys.path.append(os.path.join(SPIKE_DIR, "SPiKE"))
 
 from SPiKE.const.skeleton_joints import joint_connections, joint_indices
 from src.helpers.plt_plasma import plt_plasma
 from src.helpers.doppler_to_color import doppler_to_color
-from src.real_time.radar_utils.radar_data_parser import (
-    detect_and_open_COM_ports, sendConfig, read_raw_frame_bytes
-)
+from src.real_time.radar_utils.RadarParser import RadarParser
 from model import model_builder
 from datasets.itop import ITOP
 from utils.config_utils import load_config, set_random_seed
@@ -155,8 +157,9 @@ def run(args):
     rr.log("world", rr.ViewCoordinates.RIGHT_HAND_Y_UP, static=True)
 
     # ── Open radar ───────────────────────────────────────────────────────────
-    parserType, cliCom, dataCom = detect_and_open_COM_ports()
-    sendConfig(cliCom=cliCom)
+    radar = RadarParser()
+    parserType, cliCom, dataCom = radar.parserType, radar.cliCom, radar.dataCom
+    radar.sendConfig()
     print("Radar configured — starting inference loop …\n")
 
     # ── Sliding-window buffers ────────────────────────────────────────────────
@@ -173,9 +176,7 @@ def run(args):
                 t0 = time.perf_counter()
 
                 # ── 1. Read one raw radar frame ──────────────────────────────
-                outputDict = read_raw_frame_bytes(
-                    parserType=parserType, dataCom=dataCom, cliCom=cliCom
-                )
+                outputDict = radar.read_raw_frame_bytes()
 
                 if not outputDict or outputDict.get("error", 0) != 0:
                     print(f"Raw frame {raw_frame_idx}: bad frame, skipping")
@@ -263,8 +264,7 @@ if __name__ == "__main__":
     parser.add_argument("--config", type=str, default="ITOP-SIDE/1")
     parser.add_argument(
         "--model", type=str,
-        default=r"D:\IntraMap\Carto\R&D\Radar\Software\SPiKE_test\SPiKE"
-                r"\experiments\ITOP-SIDE\1\log\best_model.pth",
+        default=os.path.join(SPIKE_DIR, "SPiKE", "experiments", "ITOP-SIDE", "1", "log", "best_model.pth"),
     )
     args = parser.parse_args()
     run(args)

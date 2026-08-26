@@ -5,15 +5,19 @@ import numpy as np
 import h5py
 import rerun as rr
 
-sys.path.append("D:\IntraMap\Carto\R&D\Radar\Software\SPiKE_test")
+SPIKE_DIR = os.environ.get("SPIKE_DIR")
+if not SPIKE_DIR:
+    sys.exit("Set the SPIKE_DIR environment variable to your SPiKE workspace "
+             "(see 'Pose estimation (SPiKE)' in the fall detection README).")
+sys.path.append(SPIKE_DIR)
 from SPiKE.const.skeleton_joints import joint_connections, joint_indices
 from helpers.plt_plasma import plt_plasma
 
 # ── Config ──────────────────────────────────────────────────────────────────
-DATASET_DIR       = r"D:\IntraMap\Carto\R&D\Radar\Software\SPiKE_test/dataset_SPiKE/test"
-LABELS_PATH       = r"D:\IntraMap\Carto\R&D\Radar\Software\SPiKE_test/dataset_SPiKE/test_labels.h5"
-PRED_PATH         = r"D:\IntraMap\Carto\R&D\Radar\Software\SPiKE_test\predicted.npy"
-FRAME_SELECT_PATH = r"D:\IntraMap\Carto\R&D\Radar\Software\SPiKE_test\frame_ids.npy"
+DATASET_DIR       = os.path.join(SPIKE_DIR, "dataset_SPiKE", "test")
+LABELS_PATH       = os.path.join(SPIKE_DIR, "dataset_SPiKE", "test_labels.h5")
+PRED_PATH         = os.path.join(SPIKE_DIR, "predicted.npy")
+FRAME_SELECT_PATH = os.path.join(SPIKE_DIR, "frame_ids.npy")
 FRAMES_PER_CLIP   = 3       # must match config
 NUM_POINTS        = 500
 FPS               = 10

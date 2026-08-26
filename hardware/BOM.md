@@ -6,13 +6,13 @@ Everything needed to build one OpenWaves radar unit. Prefer not to source and so
 
 | # | Part | Qty | Reference | Notes |
 |---|------|-----|-----------|-------|
-| 1 | ESP32 dev board | 1 | `TBD — exact module/devboard part number` | Runs the firmware, streams heatmaps over BLE |
-| 2 | mmWave radar front-end | 1 | `TBD — transceiver part number` | Paired with the custom antenna below |
+| 1 | ESP32 dev board | 1 | *exact reference to be published — included in the DIY kit* | Runs the firmware, streams heatmaps over BLE |
+| 2 | mmWave radar front-end | 1 | [TI IWRL6432BOOST](https://www.ti.com/tool/IWRL6432BOOST) | Paired with the custom antenna below |
 | 3 | Antenna PCB | 1 | [`electronics/antenna_design/`](electronics/antenna_design/) | Custom design, simulated in [`electronics/electromagnetic_simulation/`](electronics/electromagnetic_simulation/) |
-| 4 | LiPo battery | 1 | `TBD — capacity / part number` | Fits the battery casing variant |
-| 5 | Push button | 1 | `TBD` | Mounts in the casing button assembly |
+| 4 | LiPo battery | 1 | *exact reference to be published — included in the DIY kit* | Fits the battery casing variant |
+| 5 | Push button | 1 | *exact reference to be published — included in the DIY kit* | Mounts in the casing button assembly |
 | 6 | 3D-printed casing | 1 set | [`mechanical_casing/v1/`](mechanical_casing/v1/) | PETG recommended for the body, PLA fine for the frame; print profiles (`.bgcode`) included for a Prusa MK4S |
-| 7 | Fasteners | `TBD` | `TBD` | Screws for casing assembly |
+| 7 | Fasteners | 1 set | *exact reference to be published — included in the DIY kit* | Screws for casing assembly |
 
 ## Fall detection demo (off the shelf)
 
@@ -20,4 +20,4 @@ Everything needed to build one OpenWaves radar unit. Prefer not to source and so
 |------|-----|-------|
 | TI IWRL6432BOOST evaluation board | 1 (2 for dual-radar room visualization) | CE-marked; available from [TI](https://www.ti.com) and usual distributors |
 
-> `TBD` entries need exact part numbers filled in.
+> Entries marked *to be published* ship in the DIY kit today; their exact references will be added here.

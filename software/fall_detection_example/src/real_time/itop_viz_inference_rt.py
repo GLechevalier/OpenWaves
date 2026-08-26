@@ -11,9 +11,13 @@ import h5py
 import torch
 import rerun as rr
 
+SPIKE_DIR = os.environ.get("SPIKE_DIR")
+if not SPIKE_DIR:
+    sys.exit("Set the SPIKE_DIR environment variable to your SPiKE workspace "
+             "(see 'Pose estimation (SPiKE)' in the fall detection README).")
 sys.path.append(os.getcwd())
-sys.path.append(r"D:\IntraMap\Carto\R&D\Radar\Software\SPiKE_test")
-sys.path.append(r"D:\IntraMap\Carto\R&D\Radar\Software\SPiKE_test\SPiKE")
+sys.path.append(SPIKE_DIR)
+sys.path.append(os.path.join(SPIKE_DIR, "SPiKE"))
 
 from SPiKE.const.skeleton_joints import joint_connections, joint_indices
 from src.helpers.plt_plasma import plt_plasma
@@ -25,8 +29,8 @@ from utils.metrics import joint_accuracy
 from torch.utils.data import Subset, DataLoader
 
 # ── Config ───────────────────────────────────────────────────────────────────
-LABELS_PATH     = r"D:\IntraMap\Carto\R&D\Radar\Software\SPiKE_test\dataset_SPiKE\test_labels.h5"
-DATASET_DIR     = r"D:\IntraMap\Carto\R&D\Radar\Software\SPiKE_test\dataset_SPiKE\test"
+LABELS_PATH     = os.path.join(SPIKE_DIR, "dataset_SPiKE", "test_labels.h5")
+DATASET_DIR     = os.path.join(SPIKE_DIR, "dataset_SPiKE", "test")
 FRAMES_PER_CLIP = 3
 NUM_POINTS      = 1000
 FPS             = 10
@@ -196,6 +200,7 @@ def run(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="SPiKE real-time inference + viz")
     parser.add_argument("--config", type=str, default="ITOP-SIDE/1")
-    parser.add_argument("--model",  type=str, default="D:/IntraMap/Carto/R&D/Radar/Software/SPiKE_test/SPiKE/experiments/ITOP-SIDE/1/log/best_model.pth")
+    parser.add_argument("--model",  type=str,
+                        default=os.path.join(SPIKE_DIR, "SPiKE", "experiments", "ITOP-SIDE", "1", "log", "best_model.pth"))
     args = parser.parse_args()
     run(args)

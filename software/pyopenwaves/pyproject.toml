@@ -27,7 +27,7 @@ dependencies = [
 [project.optional-dependencies]
 ble = ["bleak>=0.21"]
 viz = ["rerun-sdk>=0.20", "matplotlib"]
-ml = ["scikit-learn", "joblib", "pandas", "xgboost"]
+ml = ["scikit-learn", "joblib", "pandas", "xgboost", "seaborn"]
 dev = ["pytest>=7", "pytest-cov", "ruff"]
 
 [project.urls]

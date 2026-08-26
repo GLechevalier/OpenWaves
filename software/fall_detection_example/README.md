@@ -39,6 +39,32 @@ python src/real_time/dual_radar_room_viz.py
 python src/examples/estimate_radar_height.py
 ```
 
+## Pose estimation (SPiKE)
+
+Three optional scripts (`src/async/Itop_viz.py`,
+`src/real_time/itop_viz_inference_rt.py`,
+`src/real_time/radar_SPiKE_model_inference_rt.py`) run skeleton estimation
+with [SPiKE](https://github.com/iballester/SPiKE) — 3D human pose from point
+cloud sequences. They need a local SPiKE workspace, pointed to by the
+`SPIKE_DIR` environment variable:
+
+```
+$SPIKE_DIR/
+  SPiKE/                  # git clone https://github.com/iballester/SPiKE
+    experiments/ITOP-SIDE/1/log/best_model.pth   # trained checkpoint (train or download per SPiKE's README)
+  dataset_SPiKE/
+    test/                 # ITOP test split preprocessed as {frame_id}.npz point clouds
+    test_labels.h5        # ITOP ground-truth joints
+```
+
+```bash
+# e.g. (PowerShell)  $env:SPIKE_DIR = "D:\path\to\spike_workspace"
+#      (bash)        export SPIKE_DIR=~/spike_workspace
+python src/real_time/radar_SPiKE_model_inference_rt.py     # live radar → skeleton
+```
+
+The rest of the fall detection demo does not need SPiKE.
+
 ## Train your own
 
 ```bash

@@ -1,6 +1,8 @@
 .venv/
 inputs*/
 outputs*/
+# shipped trained weights + results (linked from the README)
+!outputs_materials/
 
 data/
 src/models/__pycache__/

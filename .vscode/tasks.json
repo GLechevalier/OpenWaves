@@ -98,8 +98,8 @@
         {
             "id": "appimagePath",
             "type": "promptString",
-            "description": "Path to the .appimage to flash",
-            "default": "hardware/firmware/IWRL6432BOOST_firmware/material_classification/Release/mmwave_demo.Release.appimage"
+            "description": "Path to the .appimage to flash (e.g. your CCS build under hardware/firmware/.../Release/)",
+            "default": "software/pyopenwaves/src/openwaves/firmware/mmwave_demo.Release.appimage"
         },
         {
             "id": "cfgFile",
