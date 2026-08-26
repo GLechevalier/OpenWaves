@@ -26,7 +26,9 @@ dependencies = [
 
 [project.optional-dependencies]
 ble = ["bleak>=0.21"]
-viz = ["rerun-sdk>=0.20", "matplotlib"]
+# rerun pinned to the 0.28 line: the shipped .rrd captures were recorded with
+# 0.28.2 and the read-back API (rerun.recording.load_recording) moved after it
+viz = ["rerun-sdk>=0.28,<0.29", "matplotlib"]
 ml = ["scikit-learn", "joblib", "pandas", "xgboost", "seaborn"]
 dev = ["pytest>=7", "pytest-cov", "ruff"]
 

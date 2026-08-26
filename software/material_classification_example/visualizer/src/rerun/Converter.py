@@ -10,7 +10,11 @@ DATA_DIR = Path(__file__).resolve().parents[3] / "data" / "rerun_recorded_data"
 def convert(number=1):
     # Load the recording
     input_path = DATA_DIR / "house_test" / "rrd" / f"data_{number}.rrd"
-    recording = rr.dataframe.load_recording(str(input_path))
+    try:
+        from rerun.recording import load_recording
+    except ImportError:  # rerun-sdk < 0.28
+        load_recording = rr.dataframe.load_recording
+    recording = load_recording(str(input_path))
 
     # Get the heatmap data
     view = recording.view(index="timestamp", contents="radar/heatmap_3d")

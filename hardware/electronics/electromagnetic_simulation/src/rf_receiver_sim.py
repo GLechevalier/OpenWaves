@@ -171,6 +171,17 @@ class RFReceiverSim:
 
 
 if __name__ == "__main__":
-    rf_receiver_sim = RFReceiverSim(force_recalculate_reflection_sim=False)
+    # See quick_look.py (one directory up) for a runnable demo on the
+    # shipped openEMS results — no openEMS install needed.
+    from quick_look import CHIRP_PARAMS
+    from src.emission_sim import ChirpGenerator
+    from src.reflection_sim import RXSignals, resolve_saved_path
+
+    tx_chirp = ChirpGenerator(**CHIRP_PARAMS)
+    rx_signals = RXSignals(
+        rx_signal_chirp_plus=np.load(resolve_saved_path("saved/rx_signal_plus.npy")),
+        rx_signal_chirp_moins=np.load(resolve_saved_path("saved/rx_signal_moins.npy")),
+    )
+    rf_receiver_sim = RFReceiverSim(tx_signal=tx_chirp, rx_signals=rx_signals)
     adc_data_dict = rf_receiver_sim.run()
     rf_receiver_sim.plot_sampled_signal()

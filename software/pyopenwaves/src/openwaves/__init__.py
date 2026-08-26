@@ -42,6 +42,8 @@ __all__ = [
     "find_all_radars",
     "flash_firmware",
     "get_bundled_appimage",
+    "VirtualRadar",
+    "Target",
 ]
 
 
@@ -59,4 +61,8 @@ def __getattr__(name: str):
         from .firmware import get_bundled_appimage
 
         return get_bundled_appimage
+    if name in ("VirtualRadar", "Target"):
+        from . import virtual
+
+        return getattr(virtual, name)
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

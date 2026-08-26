@@ -21,6 +21,14 @@ Recorded captures live in [`../data/rerun_recorded_data/`](../data/rerun_recorde
 ## Run it
 
 ```
+python classify_materials.py                        # replay + classify the shipped captures (no radar)
 python visualizer/src/rerun/recorded_data_viz.py    # replay a recording in Rerun
 python visualizer/src/rerun/data_visualizer.py      # live from the radar over BLE
 ```
+
+`classify_materials.py` opens a recording in Rerun and shows the shipped
+plastic/stone/wood captures are separable from their heatmaps alone (~96%
+with a logistic regression trained on half the frames — no GPU, no radar).
+The bundled PyTorch weights in `ML/outputs_materials/` are calibrated to
+their own recording campaign; record your own captures and retrain
+(`ML/src/`) to classify your walls.

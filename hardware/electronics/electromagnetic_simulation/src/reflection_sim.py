@@ -6,7 +6,8 @@ sys.path.insert(0, PROJECT_ROOT)
 
 from src.utils.utils import TimeSeries
 from src.emission_sim import ChirpGenerator
-from src.antenna_sim import ElectromagneticSim
+# ElectromagneticSim (openEMS) is imported lazily in __main__ so that the
+# saved-signal replay path works without an openEMS install.
 import numpy as np
 import matplotlib.pyplot as plt
 import tempfile
@@ -455,6 +456,7 @@ class FullReflectionSim(TimeSeries):
 
 
 if __name__ == "__main__":
+    from src.antenna_sim import ElectromagneticSim
 
     TX_chirp = ChirpGenerator(
         amplitude=1,

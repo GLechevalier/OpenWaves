@@ -555,13 +555,9 @@ class DigitalProcess:
 
 
 if __name__ == "__main__":
+    # Full demo on the shipped openEMS results (no openEMS install needed):
+    #   python quick_look.py   (from the electromagnetic_simulation directory)
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+    from quick_look import main
 
-    rf_receiver_sim = RFReceiverSim(force_recalculate_reflection_sim=False)
-    adc_data_dict = rf_receiver_sim.run()
-
-    dpc = DigitalProcess()
-    dpc.run(
-        adc_data_plus=adc_data_dict["plus"], 
-        adc_data_moins=adc_data_dict["moins"]
-    )
-    
+    main()

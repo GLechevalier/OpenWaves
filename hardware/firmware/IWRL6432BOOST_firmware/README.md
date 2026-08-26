@@ -1,5 +1,7 @@
 # IWRL6432BOOST firmware
 
+> **Provenance & license:** this firmware is a **derivative of the TI mmWave SDK demo** (MMWAVE-L-SDK). The TI-authored files keep their original Texas Instruments copyright headers and remain under TI's license terms — they are *not* covered by this repo's GPLv3 license. The main addition by this project is the custom Capon 3D beamforming DPU in `caponBeamforming2D_remake/`. The prebuilt `.appimage` is built against TI's SDK and is redistributed for convenience.
+
 Firmware for the TI [IWRL6432BOOST](https://www.ti.com/tool/IWRL6432BOOST) mmWave devkit. [`material_classification/`](material_classification/) is a Code Composer Studio project based on the TI mmwave demo, modified to compute Capon 3D beamforming heatmaps on-chip (custom DPU in [`caponBeamforming2D_remake/`](material_classification/caponBeamforming2D_remake/)). `point_cloud/` is a placeholder.
 
 ## Flash the prebuilt image
