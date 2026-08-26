@@ -6,8 +6,6 @@
 
 Everything you need to get started with mmWave radar: an electromagnetic simulation you can play with, a custom antenna, electronics and printable casing, and the software to run two end-to-end demos: material classification and fall detection.
 
-The radar transceiver itself is **not** an open design: it is Texas Instruments' IWRL6432 FMCW SoC, used on TI's [IWRL6432BOOST](https://www.ti.com/tool/IWRL6432BOOST) evaluation board. What this repo open-sources is everything *around* that chip — the result of 4 months of reverse engineering the IWRL6432BOOST on two fronts: its **antenna array**, re-created as a 3D model and validated in openEMS electromagnetic simulations, and its **interface layer** (flashing protocol, configuration CLI, TLV data format, documented in [docs/iwrl6432-doc.md/](docs/iwrl6432-doc.md/)), so the board can be driven entirely from Python with zero TI software installed.
-
 This repo is the open-source release of the radar behind [*I built a mmWave material classification radar*](https://gauthier-lechevalier.com/radar), [discussed on this Hacker News post](https://news.ycombinator.com/item?id=48736137).
 
 *OpenWaves is an independent project. It is not affiliated with, sponsored by, or endorsed by Texas Instruments. "Texas Instruments", "IWRL6432" and "IWRL6432BOOST" are used only to identify the off-the-shelf hardware the project runs on.*
