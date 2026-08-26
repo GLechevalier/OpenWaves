@@ -21,41 +21,40 @@ This repo is the open-source release of the radar behind [*I built a mmWave mate
 - **Hardware included** — antenna 3D model (PCB fab files coming), firmware, and a 3D-printable casing. `hardware/`
 - **Recorded data** — `.rrd` / `.npy` radar captures in `software/data/`, so every demo runs without a radar on your desk.
 
-## Quick try — no hardware needed
-
-Three things to run in your first five minutes, straight from a fresh clone:
+## Getting started
 
 ```
-pip install -e software/pyopenwaves[viz,ml] scipy
+pip install -e software/pyopenwaves[viz,ble,ml] scipy
 ```
 
-**1. See the antenna simulation results.** Replays the shipped openEMS
-results (what the 3 RX antennas receive when a chirp hits a wall) through
-the full receive chain — LNA, mixer, ADC, range FFT, Capon beamforming —
-and opens the range profile and 3D heatmap plots. No openEMS install needed.
+**No hardware needed** — three things to try from a fresh clone:
+
+**1. Antenna simulation replay** — the shipped openEMS results through the full receive chain (LNA → mixer → ADC → range FFT → Capon beamforming), with range profile and 3D heatmap plots. No openEMS install needed.
 
 ```
 cd hardware/electronics/electromagnetic_simulation && python quick_look.py
 ```
 
-**2. Replay real radar data and classify materials.** Opens a bundled
-capture in the [Rerun](https://rerun.io) viewer and shows that the
-electromagnetic fingerprints of a plastic sheet, a stone wall and a wood
-plank are distinct enough to classify at ~96% from the heatmaps alone.
+**2. Classify materials from real data** — a bundled capture in the [Rerun](https://rerun.io) viewer: plastic, stone and wood told apart at ~96% from the heatmaps alone.
 
 ```
 cd software/material_classification_example && python classify_materials.py
 ```
 
-**3. Write your first radar program — against a virtual radar.** The
-`VirtualRadar` synthesizes a scene, encodes it to real firmware wire bytes
-and feeds it through the same parser a live board uses, so your code works
-unchanged on hardware later. Start from the example (a person walking past
-the radar) and make it yours:
+**3. Your first radar program** — `VirtualRadar` synthesizes a scene as real firmware wire bytes, so your code runs unchanged on hardware later.
 
 ```
 python software/pyopenwaves/examples/virtual_radar_walk.py --rerun
 ```
+
+**Got a board?**
+
+```
+openwaves ports     # list COM ports, mark the radar
+openwaves flash     # flash the prebuilt firmware (guided, USB only)
+```
+
+In VSCode, **Ctrl+Shift+B** installs everything and `.vscode/` ships one-click flash/stream/record tasks. Full walkthrough: [docs/getting-started.md](docs/getting-started.md). To run *new* electromagnetic simulations, install openEMS & CSXCAD ([tutorial](https://docs.openems.de/python/install.html)).
 
 ## Get the openwaves devkit
 
@@ -65,27 +64,6 @@ Prefer to source everything yourself? The repo has you covered: the full [bill o
 
 https://github.com/user-attachments/assets/6c5402e7-b6d7-4883-ae2d-70329f7b1580
 
-
-## Setup
-
-```
-pip install -e software/pyopenwaves[viz,ble]
-```
-
-Then plug the board in and check it's found:
-
-```
-openwaves ports     # list COM ports, mark the radar
-openwaves flash     # flash the prebuilt firmware (guided, USB only)
-```
-
-In VSCode, **Ctrl+Shift+B** installs everything and `.vscode/` ships one-click
-tasks for flashing, streaming and recording. Full walkthrough:
-[docs/getting-started.md](docs/getting-started.md).
-
-`pip install -r requirements.txt` additionally pulls the ML and simulation
-dependencies for the demos. For the electromagnetic simulations, also
-install openEMS & CSXCAD: download the [openEMS release](https://github.com/thliebig/openEMS-Project/releases), unzip it to your `user/opt` dir, then `pip install` the `csxcad` and `openems` wheels from its `python/` folder — full tutorial [here](https://docs.openems.de/python/install.html).
 
 ## Documentation
 
