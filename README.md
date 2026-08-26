@@ -110,7 +110,7 @@ From chirp to classified target — the first stages run on the IWRL6432, the re
 
 The same chain is **implemented in simulation** — openEMS antenna fields replayed through LNA → mixer → ADC → range FFT → Capon in `quick_look.py` — so every stage runs without hardware. Each demo exercises one stage-3 branch: **material classification** the Capon heatmaps (~96% on plastic/stone/wood), **fall detection** the CFAR point cloud (tracking → CNN).
 
-<!-- Rerun session video of the radar outputs — drop the recording below -->
+https://github.com/user-attachments/assets/32a75c31-3abb-4321-8420-30cb97ea54ee
 
 ## License
 
