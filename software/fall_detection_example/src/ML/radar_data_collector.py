@@ -27,10 +27,10 @@ fall_timestamps: list[float] = []
 _stop_flag = threading.Event()
 _lock = threading.Lock()
 
-# ─────────────────────────────────────────────────────────────────
+# -----------------------------------------------------------------
 # Feature extraction
 # Point cloud columns: x=0  y=1  z=2  doppler=3  (snr=4 if present)
-# ─────────────────────────────────────────────────────────────────
+# -----------------------------------------------------------------
 
 FEATURE_COLS = [
     # per-frame height
@@ -102,9 +102,9 @@ def extract_features(pc: np.ndarray, pc_list: list, t_list: list) -> dict:
     return feats
 
 
-# ─────────────────────────────────────────────────────────────────
+# -----------------------------------------------------------------
 # Micro-Doppler recorder
-# ─────────────────────────────────────────────────────────────────
+# -----------------------------------------------------------------
 
 class MicroDopplerRecorder:
     """
@@ -340,7 +340,7 @@ def run_scan_loop(radar_parser, start_idx, max_frames,
     frame_idx = start_idx
     end_idx   = start_idx + max_frames
     t_list: list[float] = []          # timestamps parallel to point_cloud_list
-    t_map:  dict[int, float] = {}     # frame_idx → wall-clock time (for MD labeling)
+    t_map:  dict[int, float] = {}     # frame_idx -> wall-clock time (for MD labeling)
 
     while frame_idx < end_idx and not _stop_flag.is_set():
         try:

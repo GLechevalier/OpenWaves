@@ -1,6 +1,6 @@
 import numpy as np
 
-# ── Plasma colormap helper (no matplotlib needed) ────────────────────────────
+# -- Plasma colormap helper (no matplotlib needed) ----------------------------
 def plt_plasma(t: np.ndarray) -> np.ndarray:
     """Map values in [0,1] to plasma RGBA using a simple lookup."""
     plasma_pts = np.array([

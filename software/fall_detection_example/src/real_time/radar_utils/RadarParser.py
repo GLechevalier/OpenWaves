@@ -49,16 +49,35 @@ class RadarParser:
         return self.parserType, self.cliCom, self.dataCom
 
     def _open_data_port(self, data_port):
-        """Probe the firmware ('version') to pick the data port layout."""
+        """Probe the firmware ('version') to pick the data port layout.
+
+        Bench-verified: IWRL6432 demos (in-repo 'Parking_Demo' image and
+        TI's stock 'Presence_Demo', platform XWRL6432) stream TLVs on the
+        CLI UART; only older-generation demos (L684x / xWR18xx/16xx/14xx)
+        stream on the auxiliary data port.
+        """
         response = RadarCli.from_serial(self.cliCom).probe_version()
-        if "L684x" in response:
+        if "mmwdemo" not in response.lower():
+            # A previous session's 'baudRate' may have left the CLI UART at
+            # a high rate — probe those before giving up.
+            for baud in (1250000, 921600):
+                self.cliCom.baudrate = baud
+                response = RadarCli.from_serial(self.cliCom).probe_version()
+                if "mmwdemo" in response.lower():
+                    print(f"CLI answered at {baud} baud (left over from a previous run)")
+                    break
+            else:
+                self.cliCom.baudrate = 115200
+                response = ""
+        response = response.lower()
+        if "l684x" in response:
             self.parserType = "DoubleCOMPort6844"
             self.dataCom = serial.Serial(data_port, 1250000, timeout=0.6)
-        elif any(tag in response for tag in ("WR18", "WR16", "WR14")):
+        elif any(tag in response for tag in ("wr18", "wr16", "wr14")):
             self.parserType = "DoubleCOMPort6844"
             self.dataCom = serial.Serial(data_port, 921600, timeout=0.6)
         else:
-            # data streams on the CLI port (e.g. material_classification fw)
+            # IWRL6432 images: data streams on the CLI port
             self.parserType = "SingleCOMPort"
             self.dataCom = self.cliCom
 
@@ -78,7 +97,7 @@ class RadarParser:
     def sensor_stop(self, timeout=3.0):
         """Send sensorStop and wait for Done confirmation."""
         RadarCli.from_serial(self.cliCom).sensor_stop(timeout=timeout)
-        print("\u2713 Sensor stopped")
+        print("Sensor stopped")
         return True
 
     def warm_reset_and_wait(self):
@@ -87,11 +106,11 @@ class RadarParser:
         if self.dataCom and self.dataCom is not self.cliCom:
             self.dataCom.close()
         time.sleep(0.5)
-        print("  \u2713 Ports closed, letting device boot...")
+        print("  Ports closed, letting device boot...")
 
     def redetect_ports(self):
         """Re-run port detection after warm reset — mirrors first boot."""
         print("  Re-detecting COM ports...")
         parserType, cliCom, dataCom = self.detect_and_open_COM_ports()
-        print(f"  \u2713 Redetected: parserType={parserType}")
+        print(f"  Redetected: parserType={parserType}")
         return parserType, cliCom, dataCom

@@ -12,9 +12,9 @@ from src.helpers.doppler_to_color import doppler_to_color
 from src.helpers.microdoppler import log_microdoppler
 from data_processors.height_estimator import HeightEstimator
 
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 # RESET HELPERS
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 
 
 def run_scan_loop(radar_parser, 
@@ -100,9 +100,9 @@ def run_scan_loop(radar_parser,
     return frame_idx
 
 
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 # MAIN
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 
 
 # Open COM ports
@@ -135,7 +135,7 @@ point_cloud_list = []
 N = 1000
 max_frame = 100
 
-# ── SCAN 1 ──────────────────────────────────
+# -- SCAN 1 ----------------------------------
 print("\n=== SCAN 1: StaticConfig ===")
 radar_parser.sendConfig(cfg_path="cfg/StaticConfig.cfg")
 frame_idx = run_scan_loop(
@@ -194,20 +194,20 @@ height_ransac = abs(d_final)
 height_iqr    = abs(floor_z_est)
 
 if abs(height_ransac - height_iqr) > 0.15:
-    print(f"⚠ RANSAC height {height_ransac:.3f} m diverges from seed {height_iqr:.3f} m — using seed fallback")
+    print(f"! RANSAC height {height_ransac:.3f} m diverges from seed {height_iqr:.3f} m — using seed fallback")
     height = height_iqr
     # optionally refit plane normal using PCA on the z-slice directly (S1 or S2)
 else:
     height = height_ransac
 
-print("\n── Results ──────────────────────────────")
+print("\n-- Results ------------------------------")
 print(f"Sensor height : {height:.4f} m")
 print(f"Pitch         : {pitch_deg:.2f} °")
 print(f"Roll          : {roll_deg:.2f} °")
 print("\nPaste into config:")
 print(f"sensorPosition 0 0 {height:.3f} {pitch_deg:.2f} {roll_deg:.2f}")
 
-# ── CLEANUP ─────────────────────────────────
+# -- CLEANUP ---------------------------------
 print("\nClosing COM ports...")
 radar_parser.sensor_stop()  
 radar_parser.warm_reset_and_wait()

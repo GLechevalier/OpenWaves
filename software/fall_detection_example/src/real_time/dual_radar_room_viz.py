@@ -41,7 +41,7 @@ from src.helpers.doppler_to_color import doppler_to_color
 from src.data_processors.posture_detector import PostureDetector
 
 
-# ── COM PORT CONFIG ────────────────────────────────────────────────────────────
+# -- COM PORT CONFIG ------------------------------------------------------------
 RADAR1_CLI_PORT  = "COM11"
 RADAR1_DATA_PORT = "COM14"   # unused for SingleCOMPort devices
 RADAR2_CLI_PORT  = "COM15"
@@ -50,10 +50,10 @@ RADAR2_DATA_PORT = "COM8"    # unused for SingleCOMPort devices
 CFG_PATH   = "cfg/Tracking_MidBw.cfg"
 N          = 10     # sliding-window depth (frames kept per radar)
 MAX_FRAMES = 500
-# ──────────────────────────────────────────────────────────────────────────────
+# ------------------------------------------------------------------------------
 
 
-# ── RADAR POSES IN ROOM ───────────────────────────────────────────────────────
+# -- RADAR POSES IN ROOM -------------------------------------------------------
 @dataclass
 class RadarPose:
     """Position (metres) and orientation (degrees) of a radar in the room frame."""
@@ -68,10 +68,10 @@ class RadarPose:
 #   Both radars side by side (0.3 m apart along Y), same height and orientation
 RADAR1_POSE = RadarPose(x=0.0, y=0.0,  z=0.8, yaw=0.0, pitch=0.0, roll=0.0)
 RADAR2_POSE = RadarPose(x=0.3, y=0.0,  z=0.8, yaw=0.0, pitch=0.0, roll=0.0)
-# ──────────────────────────────────────────────────────────────────────────────
+# ------------------------------------------------------------------------------
 
 
-# ── GEOMETRY HELPERS ──────────────────────────────────────────────────────────
+# -- GEOMETRY HELPERS ----------------------------------------------------------
 
 def _rotation_matrix(yaw_deg: float, pitch_deg: float, roll_deg: float) -> np.ndarray:
     """Intrinsic ZYX rotation matrix: R = Rz(yaw) @ Ry(pitch) @ Rx(roll)."""
@@ -108,12 +108,12 @@ def _pose_axes_arrows(pose: RadarPose, length: float = 0.3):
     R = _rotation_matrix(pose.yaw, pose.pitch, pose.roll)
     origin = np.array([pose.x, pose.y, pose.z])
     origins = np.tile(origin, (3, 1))
-    vectors = (R * length).T          # columns of R scaled → rows = X, Y, Z axes
+    vectors = (R * length).T          # columns of R scaled -> rows = X, Y, Z axes
     colors  = [[220, 50,  50,  255],  # X red
                [50,  200, 50,  255],  # Y green
                [50,  100, 220, 255]]  # Z blue
     return origins, vectors, colors
-# ──────────────────────────────────────────────────────────────────────────────
+# ------------------------------------------------------------------------------
 
 
 class RadarParserExplicit(RadarParser):
@@ -178,7 +178,7 @@ class PrefixedPostureDetector(PostureDetector):
         color = self._COLORS[label]
         rr.log(f"{p}/posture/label",  rr.Scalars(self._LABEL_TO_INT[label]))
         rr.log(f"{p}/posture/status", rr.TextLog(
-            f"POSTURE → {label.upper()}", level=rr.TextLogLevel.INFO))
+            f"POSTURE -> {label.upper()}", level=rr.TextLogLevel.INFO))
         if f:
             rr.log(f"{p}/posture/features/z_mean",    rr.Scalars(f["z_mean"]))
             rr.log(f"{p}/posture/features/z_extent",  rr.Scalars(f["z_extent"]))
@@ -307,7 +307,7 @@ def cleanup_radar(name: str, parser: RadarParser):
             parser.dataCom.close()
 
 
-# ── MAIN ──────────────────────────────────────────────────────────────────────
+# -- MAIN ----------------------------------------------------------------------
 
 rr.init("dual_radar_room_viz")
 rr.spawn()

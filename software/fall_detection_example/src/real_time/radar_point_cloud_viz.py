@@ -22,7 +22,7 @@ def run_scan_loop(radar_parser,
     """
     frame_idx = start_idx
     end_idx = start_idx + max_frames
-    posture_detector = PostureDetector(radar_height=0.85)
+    posture_detector = PostureDetector(radar_height=0.85, model_path="models/posture_svm.pkl")
 
 
     while frame_idx < end_idx:
@@ -93,9 +93,9 @@ def run_scan_loop(radar_parser,
     return frame_idx
 
 
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 # MAIN
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 
 
 # Open COM ports
@@ -129,7 +129,7 @@ point_cloud_list = []
 N = 20
 max_frame = 500
 
-# ── SCAN 1 ──────────────────────────────────
+# -- SCAN 1 ----------------------------------
 print("\n=== SCAN 1: StaticConfig ===")
 radar_parser.sendConfig(cfg_path="cfg/Tracking_MidBw.cfg")
 frame_idx = run_scan_loop(
@@ -147,7 +147,7 @@ for pc in point_cloud_list:
 
 all_points = np.array(all_points)
 
-# ── CLEANUP ─────────────────────────────────
+# -- CLEANUP ---------------------------------
 print("\nClosing COM ports...")
 radar_parser.sensor_stop()  
 radar_parser.warm_reset_and_wait()

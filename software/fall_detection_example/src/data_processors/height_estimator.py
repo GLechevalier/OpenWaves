@@ -159,7 +159,7 @@ class HeightEstimator:
         C = (centered.T @ centered) / len(S3)
         C = C + 0.0001*np.eye(3)
         eigenvalues, eigenvectors = np.linalg.eigh(C)
-        # smallest eigenvalue → plane normal
+        # smallest eigenvalue -> plane normal
         n_final = eigenvectors[:, np.argmin(eigenvalues)]
         d_final = -n_final @ centroid
 

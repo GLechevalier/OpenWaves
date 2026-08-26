@@ -13,7 +13,7 @@ sys.path.append(SPIKE_DIR)
 from SPiKE.const.skeleton_joints import joint_connections, joint_indices
 from helpers.plt_plasma import plt_plasma
 
-# ── Config ──────────────────────────────────────────────────────────────────
+# -- Config ------------------------------------------------------------------
 DATASET_DIR       = os.path.join(SPIKE_DIR, "dataset_SPiKE", "test")
 LABELS_PATH       = os.path.join(SPIKE_DIR, "dataset_SPiKE", "test_labels.h5")
 PRED_PATH         = os.path.join(SPIKE_DIR, "predicted.npy")
@@ -21,7 +21,7 @@ FRAME_SELECT_PATH = os.path.join(SPIKE_DIR, "frame_ids.npy")
 FRAMES_PER_CLIP   = 3       # must match config
 NUM_POINTS        = 500
 FPS               = 10
-# ────────────────────────────────────────────────────────────────────────────
+# ----------------------------------------------------------------------------
 
 def load_frame_full(dataset_dir, frame_id):
     """Load full point cloud (no subsampling) for centroid computation."""

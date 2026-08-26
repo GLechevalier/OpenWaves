@@ -93,9 +93,9 @@ def run_scan_loop(radar_parser,
     return frame_idx
 
 
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 # MAIN
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 
 
 # Open COM ports
@@ -130,7 +130,7 @@ N = 20
 max_frame = 500
 CURRENT_POSTURE = "standing"   # change manually between runs
 
-# ── SCAN 1 ──────────────────────────────────
+# -- SCAN 1 ----------------------------------
 print("\n=== SCAN 1: StaticConfig ===")
 radar_parser.sendConfig(cfg_path="cfg/Tracking_MidBw.cfg")
 frame_idx = run_scan_loop(
@@ -159,7 +159,7 @@ frame_idx = run_scan_loop(
 detector.train_and_save("models/posture_svm.pkl")
 
 
-# ── CLEANUP ─────────────────────────────────
+# -- CLEANUP ---------------------------------
 print("\nClosing COM ports...")
 radar_parser.sensor_stop()  
 radar_parser.warm_reset_and_wait()

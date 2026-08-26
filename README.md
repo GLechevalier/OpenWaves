@@ -100,22 +100,15 @@ Comprehensive documentation is available in the [docs/](docs/README.md) folder �
 
 ## Processing Pipeline
 
-From chirp to classified target, every frame goes through this chain — the first stages run on the IWRL6432 itself, the rest on the host:
+From chirp to classified target — the first stages run on the IWRL6432, the rest on the host:
 
-1. **Waveform Generation** — the IWRL6432's on-chip synthesizer ramps 60 GHz FMCW chirps (chirp and frame timing configured from Python)
-2. **TX / RX & Down-Conversion** — the echo is mixed with the outgoing chirp (dechirped) to a low-frequency beat signal and digitized by the on-chip ADC
-3. **Signal Processing** (on-chip firmware):
-   - Raw ADC data capture
-   - Range FFT
-   - Doppler FFT
-   - CFAR detection → point cloud (fall-detection firmware)
-   - Capon 3D beamforming heatmaps — the custom OpenWaves DPU (material-classification firmware)
-4. **Streaming** — results packed as TLV frames over USB UART, or over BLE via the ESP32 bridge
-5. **Host Processing & Visualization** (Python) — `pyopenwaves` parses the TLV stream into typed frames, [Rerun](https://rerun.io) renders them live, and PyTorch models sit on top
+1. **Chirp Generation** — on-chip synthesizer ramps 60 GHz FMCW chirps, configured from Python
+2. **RX & Down-Conversion** — echoes dechirped to a beat signal, digitized on-chip
+3. **Signal Processing** (on-chip) — range FFT, Doppler FFT, then CFAR → point cloud, or Capon 3D heatmaps (custom OpenWaves DPU)
+4. **Streaming** — TLV frames over USB UART, or BLE via the ESP32 bridge
+5. **Host** (Python) — `pyopenwaves` parses, [Rerun](https://rerun.io) visualizes, PyTorch classifies
 
-The same chain is **implemented in simulation**: openEMS computes the fields at the RX antennas, and the receive chain — LNA, mixer, ADC, range FFT, Capon beamforming — is replayed in Python (`quick_look.py`), while `VirtualRadar` synthesizes scenes and encodes them into real firmware wire bytes. Every stage can be traced end to end without hardware on your desk.
-
-The two demos each exercise one branch of stage 3: **material classification** takes the Capon heatmap path (on-chip 3D heatmaps → BLE → Rerun → PyTorch, ~96% on plastic/stone/wood), and **fall detection** takes the point-cloud path (CFAR detections + tracking → CNN fall classifier).
+The same chain is **implemented in simulation** — openEMS antenna fields replayed through LNA → mixer → ADC → range FFT → Capon in `quick_look.py` — so every stage runs without hardware. Each demo exercises one stage-3 branch: **material classification** the Capon heatmaps (~96% on plastic/stone/wood), **fall detection** the CFAR point cloud (tracking → CNN).
 
 <!-- Rerun session video of the radar outputs — drop the recording below -->
 

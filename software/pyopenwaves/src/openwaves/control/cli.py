@@ -104,7 +104,9 @@ class RadarCli:
             chunk = self._ser.read(self._ser.in_waiting or 1)
             if chunk:
                 buffer += chunk.replace(b"\x00", b"")
-            if PROMPT in buffer and (b"Done" in buffer or b"Error" in buffer):
+            if PROMPT in buffer and (
+                b"Done" in buffer or b"Error" in buffer or b"not recognized" in buffer
+            ):
                 return buffer
             time.sleep(0.005)
         raise CliTimeoutError(
@@ -158,17 +160,25 @@ class RadarCli:
                 continue
             time.sleep(0.03)  # inter-line delay the firmware CLI needs
             parts = line.split()
+            if parts[0] == "baudRate" and len(parts) > 1:
+                # The firmware re-inits its UART at the new rate as soon as
+                # it processes the command — its 'Done' goes out at the NEW
+                # baud, so don't wait for it at the old one; just follow.
+                new_baud = int(parts[1])
+                self.send_command(line, wait_done=False)
+                time.sleep(0.1)
+                log.info("Switching CLI port to %d baud", new_baud)
+                self.set_baudrate(new_baud)
+                time.sleep(0.05)
+                self._ser.reset_input_buffer()
+                responses.append("")
+                continue
             is_sensor_start = parts[0] == "sensorStart"
             # sensorStart begins streaming: on single-UART firmware the
             # prompt is followed by binary TLV data, so don't wait for it.
             responses.append(
                 self.send_command(line, timeout=10.0 if is_sensor_start else None)
             )
-            if parts[0] == "baudRate" and len(parts) > 1:
-                new_baud = int(parts[1])
-                log.info("Switching CLI port to %d baud", new_baud)
-                time.sleep(0.05)
-                self.set_baudrate(new_baud)
         time.sleep(0.03)
         self._ser.reset_input_buffer()
         return responses

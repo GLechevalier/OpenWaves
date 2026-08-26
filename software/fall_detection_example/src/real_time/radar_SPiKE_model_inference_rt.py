@@ -2,9 +2,9 @@
 Real-time SPiKE inference on live radar data + Rerun visualization.
 
 Temporal hierarchy  (both windows slide by 1 at every new raw radar frame)
-──────────────────
-  RAW_FRAMES_PER_TRUE_FRAME = 10   raw frames  →  1 true frame  (sliding)
-  FRAMES_PER_CLIP           = 3    true frames →  1 SPiKE clip  (sliding)
+------------------
+  RAW_FRAMES_PER_TRUE_FRAME = 10   raw frames  ->  1 true frame  (sliding)
+  FRAMES_PER_CLIP           = 3    true frames ->  1 SPiKE clip  (sliding)
 
   First inference fires at raw frame index 12
     true-frame 1 : raw[ 0.. 9]
@@ -39,15 +39,15 @@ from model import model_builder
 from datasets.itop import ITOP
 from utils.config_utils import load_config, set_random_seed
 
-# ── Config ────────────────────────────────────────────────────────────────────
-RAW_FRAMES_PER_TRUE_FRAME = 10   # sliding window width → one true frame
-FRAMES_PER_CLIP           = 3    # sliding window width → one SPiKE clip
+# -- Config --------------------------------------------------------------------
+RAW_FRAMES_PER_TRUE_FRAME = 10   # sliding window width -> one true frame
+FRAMES_PER_CLIP           = 3    # sliding window width -> one SPiKE clip
 NUM_POINTS                = 1024 # points sampled per true frame for the model
 FPS                       = 30   # max Rerun timeline pace
-# ─────────────────────────────────────────────────────────────────────────────
+# -----------------------------------------------------------------------------
 
 
-# ── Helpers ───────────────────────────────────────────────────────────────────
+# -- Helpers -------------------------------------------------------------------
 
 def aggregate(raw_window: deque) -> np.ndarray:
     """
@@ -90,7 +90,7 @@ def build_clip(true_frame_window: deque,
     """
     frames   = []
     centroid = np.zeros(3, dtype=np.float32)
-    for i, true_frame in enumerate(true_frame_window):   # oldest → newest
+    for i, true_frame in enumerate(true_frame_window):   # oldest -> newest
         sampled, c = sample_and_center(true_frame, num_points)
         frames.append(sampled)
         if i == len(true_frame_window) - 1:
@@ -115,10 +115,10 @@ def log_skeleton(path: str, joint_xyz: np.ndarray, color_override=None):
         ))
 
 
-# ── Main ──────────────────────────────────────────────────────────────────────
+# -- Main ----------------------------------------------------------------------
 
 def run(args):
-    # ── Config & model ───────────────────────────────────────────────────────
+    # -- Config & model -------------------------------------------------------
     config = load_config(args.config)
     os.environ["CUDA_VISIBLE_DEVICES"] = str(config["device_args"])
     device = torch.device(0)
@@ -151,18 +151,18 @@ def run(args):
           f"{RAW_FRAMES_PER_TRUE_FRAME + frames_per_clip - 2}\n")
     #   index 0-based: need window of 10 filled (idx 9) then 2 more for 3 true frames
 
-    # ── Init Rerun ───────────────────────────────────────────────────────────
+    # -- Init Rerun -----------------------------------------------------------
     rr.init("spike_realtime", spawn=True)
     time.sleep(1)
     rr.log("world", rr.ViewCoordinates.RIGHT_HAND_Y_UP, static=True)
 
-    # ── Open radar ───────────────────────────────────────────────────────────
+    # -- Open radar -----------------------------------------------------------
     radar = RadarParser()
     parserType, cliCom, dataCom = radar.parserType, radar.cliCom, radar.dataCom
     radar.sendConfig()
     print("Radar configured — starting inference loop …\n")
 
-    # ── Sliding-window buffers ────────────────────────────────────────────────
+    # -- Sliding-window buffers ------------------------------------------------
     #   raw_window       : last RAW_FRAMES_PER_TRUE_FRAME raw frames
     #   true_frame_window: last FRAMES_PER_CLIP true frames
     raw_window        = deque(maxlen=RAW_FRAMES_PER_TRUE_FRAME)
@@ -175,7 +175,7 @@ def run(args):
             while True:
                 t0 = time.perf_counter()
 
-                # ── 1. Read one raw radar frame ──────────────────────────────
+                # -- 1. Read one raw radar frame ------------------------------
                 outputDict = radar.read_raw_frame_bytes()
 
                 if not outputDict or outputDict.get("error", 0) != 0:
@@ -185,7 +185,7 @@ def run(args):
 
                 pc_raw = outputDict["pointCloud"].astype(np.float32)   # (P, ≥3)
 
-                # ── 2. Push into raw sliding window → new true frame ─────────
+                # -- 2. Push into raw sliding window -> new true frame ---------
                 raw_window.append(pc_raw)
 
                 # Log the current raw point cloud every tick (always visible)
@@ -198,7 +198,7 @@ def run(args):
                         colors=colors,
                     ))
 
-                # ── 3. True frame: only available once raw window is full ─────
+                # -- 3. True frame: only available once raw window is full -----
                 if len(raw_window) < RAW_FRAMES_PER_TRUE_FRAME:
                     remaining_raw = RAW_FRAMES_PER_TRUE_FRAME - len(raw_window)
                     remaining_true = frames_per_clip - len(true_frame_window)
@@ -220,7 +220,7 @@ def run(args):
                         colors=colors,
                     ))
 
-                # ── 4. Inference: only once the clip window is full ───────────
+                # -- 4. Inference: only once the clip window is full -----------
                 if len(true_frame_window) < frames_per_clip:
                     remaining = frames_per_clip - len(true_frame_window)
                     print(f"  Warming up — need {remaining} more true frame(s) "

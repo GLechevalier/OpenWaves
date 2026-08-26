@@ -2,7 +2,7 @@
 diagnose.py — Dataset diagnosis and model evaluation for fall detection.
 
 Usage
-─────
+-----
   python diagnose.py --sessions data/sessions/
   python diagnose.py --sessions data/sessions/ --models models/
   python diagnose.py --sessions data/sessions/ --relabel --pre 1.0 --post 3.0
@@ -24,12 +24,12 @@ FEATURE_COLS = [
     "delta_z", "delta_z_rate", "doppler_post", "window_z_std",
 ]
 
-# ─────────────────────────────────────────────────────────────────
+# -----------------------------------------------------------------
 # Key insight: a fall is a TRANSITION over 10-20 frames, not a state.
 # mean_z during fall frames is meaningless — it averages standing +
 # mid-fall + lying, giving a value close to normal standing height.
 # The correct metric is the z DROP across each contiguous fall event.
-# ─────────────────────────────────────────────────────────────────
+# -----------------------------------------------------------------
 
 def _z_drop(df: pd.DataFrame) -> float:
     """
@@ -75,9 +75,9 @@ def _count_fall_events(df: pd.DataFrame) -> int:
     return count
 
 
-# ─────────────────────────────────────────────────────────────────
+# -----------------------------------------------------------------
 # 1. Dataset diagnosis
-# ─────────────────────────────────────────────────────────────────
+# -----------------------------------------------------------------
 
 def diagnose_dataset(sessions_dir: str):
     csv_paths = sorted(glob.glob(os.path.join(sessions_dir, "*_labeled.csv")))
@@ -139,47 +139,47 @@ def diagnose_dataset(sessions_dir: str):
 
     no_falls = summary[summary["fall_frames"] == 0]
     if len(no_falls):
-        print(f"  ⚠  {len(no_falls)} sessions have 0 fall frames (ADL sessions — OK if intentional)")
+        print(f"  !  {len(no_falls)} sessions have 0 fall frames (ADL sessions — OK if intentional)")
 
     # The key diagnostic: is z_drop actually negative?
     fall_sessions = summary[summary["fall_frames"] > 0]
     if len(fall_sessions):
         mean_drop = fall_sessions["z_drop(m)"].dropna().mean()
         if np.isnan(mean_drop):
-            print("  ⚠  z_drop could not be computed — fall windows too short (< 6 frames)")
+            print("  !  z_drop could not be computed — fall windows too short (< 6 frames)")
         elif mean_drop > -0.05:
-            print(f"  ✗  CRITICAL: mean z_drop = {mean_drop:.3f} m  (want < -0.3 m)")
+            print(f"  x  CRITICAL: mean z_drop = {mean_drop:.3f} m  (want < -0.3 m)")
             print("     The radar cannot distinguish standing from lying.")
-            print("     → Check radar tilt angle (should be 15-30 deg downward)")
-            print("     → Check cfg: elevation must be enabled (channelCfg second value = 7)")
+            print("     -> Check radar tilt angle (should be 15-30 deg downward)")
+            print("     -> Check cfg: elevation must be enabled (channelCfg second value = 7)")
         elif mean_drop > -0.3:
-            print("  ⚠  z_drop = {mean_drop:.3f} m — weak signal (want < -0.3 m)")
+            print("  !  z_drop = {mean_drop:.3f} m — weak signal (want < -0.3 m)")
             print("     Try increasing radar tilt angle.")
         else:
-            print("  ✓  z_drop = {mean_drop:.3f} m — good height separation")
+            print("  v  z_drop = {mean_drop:.3f} m — good height separation")
 
         mean_dz = fall_sessions["peak_dz_rate"].dropna().mean()
         if not np.isnan(mean_dz):
             if mean_dz > -0.1:
-                print(f"  ✗  CRITICAL: peak delta_z_rate = {mean_dz:.3f} m/s during falls")
+                print(f"  x  CRITICAL: peak delta_z_rate = {mean_dz:.3f} m/s during falls")
                 print("     No velocity drop detected — z_rate feature is blind to falls")
             elif mean_dz > -0.3:
-                print(f"  ⚠  peak delta_z_rate = {mean_dz:.3f} m/s — weak (want < -0.3)")
+                print(f"  !  peak delta_z_rate = {mean_dz:.3f} m/s — weak (want < -0.3)")
             else:
-                print(f"  ✓  peak delta_z_rate = {mean_dz:.3f} m/s — good fall velocity signal")
+                print(f"  v  peak delta_z_rate = {mean_dz:.3f} m/s — good fall velocity signal")
 
     if total_falls < 200:
-        print(f"  ⚠  Only {total_falls} fall frames. Need 200+ for reliable training.")
+        print(f"  !  Only {total_falls} fall frames. Need 200+ for reliable training.")
         print("     Run: python diagnose.py --relabel --pre 1.0 --post 3.0")
     else:
-        print(f"  ✓  {total_falls} fall frames — sufficient for training")
+        print(f"  v  {total_falls} fall frames — sufficient for training")
 
     return summary
 
 
-# ─────────────────────────────────────────────────────────────────
+# -----------------------------------------------------------------
 # 2. Re-label with wider window
-# ─────────────────────────────────────────────────────────────────
+# -----------------------------------------------------------------
 
 def relabel_sessions(sessions_dir: str, pre_fall_s: float = 1.0, post_fall_s: float = 3.0):
     import csv
@@ -221,14 +221,14 @@ def relabel_sessions(sessions_dir: str, pre_fall_s: float = 1.0, post_fall_s: fl
                 row["label"] = label
                 writer.writerow(row)
 
-        print(f"  {Path(base).name[-45:]:<45} → {fall_count} fall frames")
+        print(f"  {Path(base).name[-45:]:<45} -> {fall_count} fall frames")
 
     print("Done.")
 
 
-# ─────────────────────────────────────────────────────────────────
+# -----------------------------------------------------------------
 # 3. Model evaluation
-# ─────────────────────────────────────────────────────────────────
+# -----------------------------------------------------------------
 
 def evaluate_models(sessions_dir: str, models_dir: str):
     from xgboost import XGBClassifier
@@ -297,8 +297,8 @@ def evaluate_models(sessions_dir: str, models_dir: str):
     print("\n  Confusion matrix (threshold=0.5):")
     print("                  Predicted")
     print("                  Normal   Fall")
-    print(f"  Actual Normal   {tn:6d}  {fp:5d}   ← false alarms")
-    print(f"  Actual Fall     {fn:6d}  {tp:5d}   ← missed falls")
+    print(f"  Actual Normal   {tn:6d}  {fp:5d}   <- false alarms")
+    print(f"  Actual Fall     {fn:6d}  {tp:5d}   <- missed falls")
 
     print("\n  Per-action breakdown:")
     print(f"  {'Action':<20} {'Frames':>7} {'Falls':>6} {'Recall':>8} {'FalseAlarm%':>12}")
@@ -312,9 +312,9 @@ def evaluate_models(sessions_dir: str, models_dir: str):
         print(f"  {action:<20} {mask.sum():>7} {int(yy.sum()):>6} {recall:>8.3f} {fa:>11.1f}%")
 
 
-# ─────────────────────────────────────────────────────────────────
+# -----------------------------------------------------------------
 # MAIN
-# ─────────────────────────────────────────────────────────────────
+# -----------------------------------------------------------------
 
 def main():
     parser = argparse.ArgumentParser()

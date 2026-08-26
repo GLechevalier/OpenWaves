@@ -3,7 +3,7 @@ Dual-radar real-time point cloud visualization.
 
 Usage:
     1. Set RADAR1_* and RADAR2_* COM port constants below.
-       (Device Manager → Ports: each IWR radar shows two ports —
+       (Device Manager -> Ports: each IWR radar shows two ports —
         lower number = CLI (115200 baud), higher = data (921600 baud))
     2. python src/real_time/dual_radar_viz.py
 
@@ -27,16 +27,16 @@ from src.helpers.doppler_to_color import doppler_to_color
 from src.data_processors.posture_detector import PostureDetector
 
 
-# ── COM PORT CONFIG ────────────────────────────────────────────────────────────
-RADAR1_CLI_PORT  = "COM11"  # ← first radar CLI port
-RADAR1_DATA_PORT = "COM14"  # ← first radar data port (unused for SingleCOMPort)
-RADAR2_CLI_PORT  = "COM15"  # ← second radar CLI port
-RADAR2_DATA_PORT = "COM8"   # ← second radar data port (unused for SingleCOMPort)
+# -- COM PORT CONFIG ------------------------------------------------------------
+RADAR1_CLI_PORT  = "COM11"  # <- first radar CLI port
+RADAR1_DATA_PORT = "COM14"  # <- first radar data port (unused for SingleCOMPort)
+RADAR2_CLI_PORT  = "COM15"  # <- second radar CLI port
+RADAR2_DATA_PORT = "COM8"   # <- second radar data port (unused for SingleCOMPort)
 
 CFG_PATH   = "cfg/Tracking_MidBw.cfg"
 N          = 10    # sliding window depth (frames kept in point cloud list)
 MAX_FRAMES = 500
-# ──────────────────────────────────────────────────────────────────────────────
+# ------------------------------------------------------------------------------
 
 
 class RadarParserExplicit(RadarParser):
@@ -95,7 +95,7 @@ class PrefixedPostureDetector(PostureDetector):
         color = self._COLORS[label]
         rr.log(f"{p}/posture/label",  rr.Scalars(self._LABEL_TO_INT[label]))
         rr.log(f"{p}/posture/status", rr.TextLog(
-            f"POSTURE → {label.upper()}", level=rr.TextLogLevel.INFO))
+            f"POSTURE -> {label.upper()}", level=rr.TextLogLevel.INFO))
         if f:
             rr.log(f"{p}/posture/features/z_mean",   rr.Scalars(f["z_mean"]))
             rr.log(f"{p}/posture/features/z_extent",  rr.Scalars(f["z_extent"]))
@@ -211,7 +211,7 @@ def cleanup_radar(name: str, parser: RadarParser):
             parser.dataCom.close()
 
 
-# ── MAIN ──────────────────────────────────────────────────────────────────────
+# -- MAIN ----------------------------------------------------------------------
 
 rr.init("dual_radar_viz")
 rr.spawn()

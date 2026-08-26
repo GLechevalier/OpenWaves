@@ -1,6 +1,6 @@
 """
 fall_detector_live.py
-──────────────────────────────────────────────────────────────────
+------------------------------------------------------------------
 Real-time fall detection using trained XGBoost + CNN models.
 Sends instant alerts to your phone via a live web UI.
 
@@ -10,12 +10,12 @@ Phone UI  ->  http://<your-pc-ip>:8766
   - Mute / test buttons
 
 Usage
-─────
+-----
   python fall_detector_live.py
   python fall_detector_live.py --models models/ --threshold 0.45
 
 Requirements
-────────────
+------------
   pip install xgboost torch numpy
 """
 
@@ -31,9 +31,9 @@ sys.path.append(os.getcwd())
 
 
 class FallDetector:
-    # ─────────────────────────────────────────────────────────────────
+    # -----------------------------------------------------------------
     # Config — must match training script exactly
-    # ─────────────────────────────────────────────────────────────────
+    # -----------------------------------------------------------------
 
     EARLY_END = 10
     MID_END   = 20
@@ -70,9 +70,9 @@ class FallDetector:
         return
 
 
-    # ─────────────────────────────────────────────────────────────────
+    # -----------------------------------------------------------------
     # Feature extraction (identical to radar_record.py)
-    # ─────────────────────────────────────────────────────────────────
+    # -----------------------------------------------------------------
 
     def extract_frame_features(self, pc: np.ndarray, pc_list: list, t_list: list) -> dict:
         nan = float("nan")
@@ -107,9 +107,9 @@ class FallDetector:
         return cols
 
 
-    # ─────────────────────────────────────────────────────────────────
+    # -----------------------------------------------------------------
     # Window feature extraction (identical to train_fall_detector.py)
-    # ─────────────────────────────────────────────────────────────────
+    # -----------------------------------------------------------------
 
     def window_features(self, w: np.ndarray) -> np.ndarray:
         w = np.nan_to_num(w, nan=0.0)
@@ -159,9 +159,9 @@ class FallDetector:
         ], dtype=np.float32)
 
 
-    # ─────────────────────────────────────────────────────────────────
+    # -----------------------------------------------------------------
     # Model loading
-    # ─────────────────────────────────────────────────────────────────
+    # -----------------------------------------------------------------
 
     def load_models(self):
         from xgboost import XGBClassifier
@@ -231,9 +231,9 @@ class FallDetector:
         return xgb, cnn, cnn_mean, cnn_std, cnn_window, weights
 
 
-    # ─────────────────────────────────────────────────────────────────
+    # -----------------------------------------------------------------
     # Inference — called every frame once buffer is full
-    # ─────────────────────────────────────────────────────────────────
+    # -----------------------------------------------------------------
 
     def run_inference(self, xgb, cnn, cnn_mean, cnn_std, cnn_window, weights) -> dict | None:
         global _current_prob
@@ -272,9 +272,9 @@ class FallDetector:
                 "p_fused": round(p_fused, 3)}
 
 
-    # ─────────────────────────────────────────────────────────────────
+    # -----------------------------------------------------------------
     # SSE push — notify all connected phone browsers instantly
-    # ─────────────────────────────────────────────────────────────────
+    # -----------------------------------------------------------------
 
     def push_event(self, event_type: str, data: dict):
         msg = f"event: {event_type}\ndata: {json.dumps(data)}\n\n"

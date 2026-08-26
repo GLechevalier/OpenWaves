@@ -73,7 +73,7 @@ class PostureDetector:
         if model_path and os.path.exists(model_path):
             self.load(model_path)
 
-    # ── Public: inference ─────────────────────────────────────────────
+    # -- Public: inference ---------------------------------------------
 
     def update(self, point_cloud_list: list) -> str:
         """
@@ -95,7 +95,7 @@ class PostureDetector:
         label = self._smooth(label)
         return self._log(label, features)
 
-    # ── Public: data collection ───────────────────────────────────────
+    # -- Public: data collection ---------------------------------------
 
     def collect_sample(self, point_cloud_list: list, label: str):
         """
@@ -146,7 +146,7 @@ class PostureDetector:
 
         os.makedirs(os.path.dirname(save_path) or ".", exist_ok=True)
         joblib.dump(self._pipeline, save_path)
-        print(f"[PostureDetector] Model saved → {save_path}")
+        print(f"[PostureDetector] Model saved -> {save_path}")
 
         # Quick cross-val score
         from sklearn.model_selection import cross_val_score
@@ -156,14 +156,14 @@ class PostureDetector:
     def load(self, path: str):
         """Load a previously saved model pipeline."""
         self._pipeline = joblib.load(path)
-        print(f"[PostureDetector] Model loaded ← {path}")
+        print(f"[PostureDetector] Model loaded <- {path}")
 
     def clear_buffer(self):
         """Reset the data collection buffer."""
         self._X, self._y = [], []
         print("[PostureDetector] Buffer cleared.")
 
-    # ── Feature extraction ────────────────────────────────────────────
+    # -- Feature extraction --------------------------------------------
 
     def _collect_points(self, point_cloud_list):
         if not point_cloud_list:
@@ -180,12 +180,12 @@ class PostureDetector:
         pts = pts.copy()
         pts[:, 2] = self._radar_height - pts[:, 2]
 
-        # ── Basic stats ───────────────────────────────────────────────
+        # -- Basic stats -----------------------------------------------
         z_mean   = float(pts[:, 2].mean())
         z_extent = float(pts[:, 2].max() - pts[:, 2].min())
         xy_spread = float(pts[:, :2].std())
 
-        # ── PCA for flatness ──────────────────────────────────────────
+        # -- PCA for flatness ------------------------------------------
         centered = pts - pts.mean(axis=0)
         cov = np.cov(centered.T)
         eigenvalues = np.linalg.eigvalsh(cov)   # ascending
@@ -206,7 +206,7 @@ class PostureDetector:
         """Ordered feature vector fed to the SVM."""
         return [f["z_mean"], f["z_extent"], f["xy_spread"], f["flatness"]]
 
-    # ── Smoothing ─────────────────────────────────────────────────────
+    # -- Smoothing -----------------------------------------------------
 
     def _smooth(self, label: str) -> str:
         self._history.append(label)
@@ -214,13 +214,13 @@ class PostureDetector:
             self._history.pop(0)
         return max(set(self._history), key=self._history.count)
 
-    # ── Rerun logging ─────────────────────────────────────────────────
+    # -- Rerun logging -------------------------------------------------
 
     def _log(self, label: str, f: dict) -> str:
         color = self._COLORS[label]
         rr.log("posture/label",  rr.Scalars(self._LABEL_TO_INT[label]))
         rr.log("posture/status", rr.TextLog(
-            f"POSTURE → {label.upper()}",
+            f"POSTURE -> {label.upper()}",
             level=rr.TextLogLevel.INFO,
         ))
         if f:

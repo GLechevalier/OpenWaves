@@ -28,7 +28,7 @@ from utils.config_utils import load_config, set_random_seed
 from utils.metrics import joint_accuracy
 from torch.utils.data import Subset, DataLoader
 
-# ── Config ───────────────────────────────────────────────────────────────────
+# -- Config -------------------------------------------------------------------
 LABELS_PATH     = os.path.join(SPIKE_DIR, "dataset_SPiKE", "test_labels.h5")
 DATASET_DIR     = os.path.join(SPIKE_DIR, "dataset_SPiKE", "test")
 FRAMES_PER_CLIP = 3
@@ -37,7 +37,7 @@ FPS             = 10
 start           = 1000
 nb              = 2000
 SELECTED_IDS    = list(range(start, start + nb))
-# ─────────────────────────────────────────────────────────────────────────────
+# -----------------------------------------------------------------------------
 
 
 def load_frame_full(dataset_dir, frame_id):
@@ -188,7 +188,7 @@ def run(args):
             time.sleep(1.0 / FPS)
 
     # --- Summary ---
-    print("\n── Summary ──────────────────────────────")
+    print("\n-- Summary ------------------------------")
     print(f"Samples:  {len(results)}")
     print(f"Avg loss: {np.mean([r['loss'] for r in results]):.4f}")
     print(f"Avg mAP:  {np.mean([r['mAP']  for r in results]):.4f}")

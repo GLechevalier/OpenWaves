@@ -101,13 +101,29 @@ class Radar:
     def _detect_layout(self) -> None:
         """Probe the firmware to choose single- vs dual-port streaming.
 
-        TI's stock demos answer ``version`` with a platform string
-        (``L684x`` on the IWRL6432 MPD demo, which streams on the auxiliary
-        data port). Anything else — including the in-repo material
-        classification firmware — is treated as single-port.
+        Bench-verified: on the IWRL6432, both the in-repo image (prints
+        ``Parking_Demo``) and TI's stock demos (``Presence_Demo``, platform
+        ``XWRL6432``) stream TLVs on the CLI UART — that is what their
+        ``baudRate 1250000`` config line is for. Only the older-generation
+        demos (``L684x`` / xWR18xx / 16xx / 14xx) stream on the auxiliary
+        data port.
         """
-        response = self._require_cli().probe_version()
-        if "L684x" in response or "xWRL6" in response:
+        cli = self._require_cli()
+        response = cli.probe_version()
+        if "mmwdemo" not in response.lower():
+            # No prompt at the default baud — a previous session's 'baudRate'
+            # may have left the CLI UART at a high rate. Probe those too.
+            for baud in DUAL_PORT_DATA_BAUDS:
+                cli.set_baudrate(baud)
+                response = cli.probe_version()
+                if "mmwdemo" in response.lower():
+                    log.info("CLI answered at %d baud (left over from a previous run)", baud)
+                    break
+            else:
+                cli.set_baudrate(self._cli_baudrate)
+                response = ""
+        response = response.lower()
+        if "l684x" in response or any(t in response for t in ("wr18", "wr16", "wr14")):
             self.layout = "dual"
         else:
             self.layout = "single"
