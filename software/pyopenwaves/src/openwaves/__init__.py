@@ -44,6 +44,7 @@ __all__ = [
     "get_bundled_appimage",
     "VirtualRadar",
     "Target",
+    "office_scene",
 ]
 
 
@@ -61,7 +62,7 @@ def __getattr__(name: str):
         from .firmware import get_bundled_appimage
 
         return get_bundled_appimage
-    if name in ("VirtualRadar", "Target"):
+    if name in ("VirtualRadar", "Target", "office_scene"):
         from . import virtual
 
         return getattr(virtual, name)
