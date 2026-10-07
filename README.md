@@ -56,9 +56,7 @@ In VSCode, **Ctrl+Shift+B** installs everything and `.vscode/` ships one-click f
 
 ## Get the openwaves devkit
 
-Want to run the demos on real hardware without hunting down parts? **The OpenWaves DIY kit is available [here](https://2t1rza-p3.myshopify.com/products/openwaves-diy-kit-mmwave-radar-development-kit)** — every component in one box: radar board, electronics, battery and casing, ready to assemble yourself following the [docs](docs/README.md). Building your own radar is the best way to understand it — and buying a kit is the best way to support the development of this project.
-
-Prefer to source everything yourself? The repo has you covered: the full [bill of materials](hardware/BOM.md), antenna design, firmware and printable casing live in [hardware/](hardware/).
+Want to run the demos on real hardware ? The repo has you covered: the full [bill of materials](hardware/BOM.md), antenna design, firmware and printable casing live in [hardware/](hardware/).
 
 https://github.com/user-attachments/assets/6c5402e7-b6d7-4883-ae2d-70329f7b1580
 
